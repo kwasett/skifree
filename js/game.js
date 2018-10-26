@@ -28,8 +28,7 @@ $(document).ready(function () {
         'skierJump2': 'img/skier_jump_2.png',
         'skierJump3': 'img/skier_jump_3.png',
         'skierJump4': 'img/skier_jump_4.png',
-        'skierJump5': 'img/skier_jump_5.png',
-        'skierLeftDown': 'img/skier_left_down.png',
+        'skierJump5': 'img/skier_jump_5.png'
 
 
     };
@@ -39,6 +38,7 @@ $(document).ready(function () {
         'collide': -50,
         'rhinoEat': -1000
     };
+
 
 
     var loadedAssets = {};
@@ -52,23 +52,30 @@ $(document).ready(function () {
 
     var obstacles = [];
 
-    var gameWidth = window.innerWidth;
+    var gameWidth = window.innerWidth *0.8; //80% of the screen
     var gameHeight = window.innerHeight;
     var canvas = $('<canvas></canvas>')
         .attr('width', gameWidth * window.devicePixelRatio)
         .attr('height', gameHeight * window.devicePixelRatio)
         .css({
             width: gameWidth + 'px',
-            height: gameHeight + 'px'
+            height: gameHeight + 'px',
+            border: 'solid 2px #ddd',
+            float : 'left'
         });
     var details = $('<div></div>')
         .attr("id", "details")
+        .css({
+            width : (0.18 * window.innerWidth)+'px', 
+            height: gameHeight,
+            float : 'right' 
+        })
+        .append($("<div><em>To Pause or Resume use the space Bar , Press F to make it move faster and D for slow down</em></div>").attr("id", "status"))
         .append($("<div>Scores : <span></span></div>").attr("id", "scores"))
         .append($("<div>Speed : <span></span></div>").attr("id", "speed"))
-        .append($("<div>CollisionCount : <span></span></div>").attr("id", "collisions"))
+        .append($("<div>No of Lives : <span></span></div>").attr("id", "collisions"))
         .append($("<div>Status : <span></span></div>").attr("id", "status"))
-        .append($("<div><em>To Pause or Resume use the space Bar , Press F to make it move faster and D for slow down</em></div>").attr("id", "status"))
-        .append($("<div>&nbsp;</div>").attr("id", "clearboth"));
+         .append($("<div><br /><br /><h3>Top Scores</h3><ol></ol></div>").attr("id", "topscores"));
     $('body').append(details).append(canvas);
     var ctx = canvas[0].getContext('2d');
 
@@ -84,7 +91,7 @@ $(document).ready(function () {
     var scoreForChase = 5000;
     var rhinoAttack = false;
     var maxCollisions = 3;
-    var collisionCount = 0;
+    var livesCount = maxCollisions;
     var gamePaused = false;
     var scoreItem = "";
 
@@ -98,7 +105,7 @@ $(document).ready(function () {
     var displayDetails = function () {
         $("#scores span").html(skierScore);
         $("#speed span").html(skierSpeed);
-        $("#collisions span").html(collisionCount);
+        $("#collisions span").html(livesCount);
         $("#status span").html(gamePaused ? "Paused" : "Playing");
     }
 
@@ -170,6 +177,20 @@ $(document).ready(function () {
 
     }
 
+    var showTopScores = function(){
+        var topScores = highestScores();
+        $("#topscores ol").html("");
+        var scoresLength = topScores.length;
+        for (var i = 0; i < scoresLength; i++) {
+            $(displaySingleScore(topScores[i])).appendTo("#topscores ol");
+            //Do something
+        }
+
+    }
+
+    var  displaySingleScore = function(score){
+        return '<li>'+score.name +'   : <strong>'+score.score+'</li>';
+    }
 
     var calculateScore = function () {
         if (hasMoved)
@@ -180,8 +201,6 @@ $(document).ready(function () {
             console.log("Old Score Value :" + skierScore);
             itemScore = isNaN(itemScore) ? 0 : itemScore;
             skierScore += (itemScore + 0);
-
-
         }
     }
 
@@ -396,11 +415,9 @@ $(document).ready(function () {
 
         if (collision) {
             if (skierDirection !== 0) {
-                collisionCount++;
+                livesCount--;
                 addScore(actionScores["collide"]);
-
-
-                if (maxCollisions <= collisionCount) {
+                if (livesCount <= 0) {
                     console.log("Reached Max Collission")
                     endGame()
                 }
@@ -463,22 +480,52 @@ $(document).ready(function () {
         return $.when.apply($, assetPromises);
     };
 
+    var saveScores = function (name, score) {
+
+        let oldScores = getlocalScores();
+        oldScores.push({ name: name, score: score })
+        let valueJson = JSON.stringify(oldScores);
+        localStorage.setItem(GAME_SCORES, valueJson);
+
+        var topscores= highestScores();
+        
+    }
+
+    const GAME_SCORES = "GameScores";
+    var getlocalScores = function () {
+        const scores = localStorage.getItem(GAME_SCORES);
+        if (!scores) {
+            return [];
+        } else
+            return JSON.parse(scores)
+    }
+
+    var highestScores = function () {
+        var scores = getScores(10, true, "score", "desc");
+        console.log(JSON.stringify(scores));
+        return scores;
+    }
+
+    var getScores = function (limit, sortAble, sortByField, sortDirection) {
+            const scores = getlocalScores();
+            var list =  _.orderBy(scores, [sortByField],[sortDirection]);
+            return list.slice(1,limit);
+    }
 
     var pauseResume = function () {
         gamePaused = !gamePaused;
-        console.log("Game Paused : " + gamePaused);
-        var iii = true;
-
-        !iii;
-        console.log("Game Paused : " + iii);
     }
 
 
 
     var endGame = function () {
-        console.log("Game Ended due to : " + collisionCount);
-        // reset();
+        var cname = prompt("Game Ended your score was " + skierScore+"\n\nKindly enter your name.");
+        saveScores(cname,skierScore);
+        showTopScores();
+        reset()
     }
+
+
     var setupKeyhandler = function () {
         $(window).keydown(function (event) {
             console.log("Key Presed : " + event.which);
@@ -542,16 +589,17 @@ $(document).ready(function () {
     };
 
     var defaultSettings = function () {
-        var skierDirection = 5;
-        var skierMapX = 0;
-        var skierMapY = 0;
-        var skierSpeed = 8;
-        var skierLevel = 1;
-        var skierScore = 0;
-        var gamePaused = false;
-        var collisionCount = 0;
+         skierDirection = 5;
+         skierMapX = 0;
+         skierMapY = 0;
+         skierSpeed = 8;
+         skierLevel = 1;
+         skierScore = 0;
+         gamePaused = false;
+         livesCount = maxCollisions;
+       
 
-        var loadedAssets = {};
+         loadedAssets = {};
 
         obstacleTypes = [
             'tree',
@@ -568,6 +616,7 @@ $(document).ready(function () {
         defaultSettings();
         initGame(gameLoop);
     }
+
     var initGame = function () {
         setupKeyhandler();
         loadAssets().then(function () {
@@ -576,5 +625,6 @@ $(document).ready(function () {
         });
     };
 
+    showTopScores();
     initGame(gameLoop);
 });

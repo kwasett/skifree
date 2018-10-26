@@ -5,10 +5,7 @@ html, body {
 #details{
     border-bottom: solid 2px #f0f0f0;
 }
-#details div{
-    float: left;
-    margin-right: 1em;
-} 
+
 #details span{
     font-weight: bold;
 }
