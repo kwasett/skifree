@@ -52,7 +52,7 @@ $(document).ready(function () {
 
     var obstacles = [];
 
-    var gameWidth = window.innerWidth *0.8; //80% of the screen
+    var gameWidth = window.innerWidth * 0.8; //80% of the screen
     var gameHeight = window.innerHeight;
     var canvas = $('<canvas></canvas>')
         .attr('width', gameWidth * window.devicePixelRatio)
@@ -61,41 +61,58 @@ $(document).ready(function () {
             width: gameWidth + 'px',
             height: gameHeight + 'px',
             border: 'solid 2px #ddd',
-            float : 'left'
+            float: 'left'
         });
     var details = $('<div></div>')
         .attr("id", "details")
         .css({
-            width : (0.18 * window.innerWidth)+'px', 
+            width: (0.18 * window.innerWidth) + 'px',
             height: gameHeight,
-            float : 'right' 
+            float: 'right'
         })
         .append($("<div><em>To Pause or Resume use the space Bar , Press F to make it move faster and D for slow down</em></div>").attr("id", "status"))
         .append($("<div>Scores : <span></span></div>").attr("id", "scores"))
         .append($("<div>Speed : <span></span></div>").attr("id", "speed"))
+        .append($("<div>Level : <span></span></div>").attr("id", "level"))
         .append($("<div>No of Lives : <span></span></div>").attr("id", "collisions"))
         .append($("<div>Status : <span></span></div>").attr("id", "status"))
-         .append($("<div><br /><br /><h3>Top Scores</h3><ol></ol></div>").attr("id", "topscores"));
+        .append($("<div><br /><br /><h3>Top Scores</h3><ol></ol></div>").attr("id", "topscores"));
     $('body').append(details).append(canvas);
     var ctx = canvas[0].getContext('2d');
 
     var skierDirection = 5;
     var skierMapX = 0;
     var skierMapY = 0;
+
+    var skX, skY = 0;
+    var skierSpeed = 8;
+    var skierLevel = 1;
+    var scorePerLevel = 4000;
+    var skierScore = 0;
+    var scoreForChase = 1000;
+
+
+
+    var rhinoSpeed = skierSpeed;
     var rhinoMapX = 0;
     var rhinoMapY = 0;
-    var skierSpeed = 10;
-    var rhinoSpeed = skierSpeed * 1.2;
-    var skierLevel = 1;
-    var skierScore = 0;
-    var scoreForChase = 5000;
     var rhinoAttack = false;
+    var rhinoDirection = 0;
+    var rhinoSkierCollide = 0;
+
     var maxCollisions = 3;
     var livesCount = maxCollisions;
     var gamePaused = false;
     var scoreItem = "";
 
     var hasMoved = false;
+    var skierCanMove = true;
+
+
+
+    //tobe delete
+
+    var rMove = 0;
 
     var clearCanvas = function () {
         ctx.clearRect(0, 0, gameWidth, gameHeight);
@@ -106,14 +123,54 @@ $(document).ready(function () {
         $("#scores span").html(skierScore);
         $("#speed span").html(skierSpeed);
         $("#collisions span").html(livesCount);
+        $("#level span").html(skierLevel);
         $("#status span").html(gamePaused ? "Paused" : "Playing");
     }
 
     var moveRhino = function () {
-        if (gamePaused)
+        if (gamePaused || !rhinoAttack)
             return;
 
-        switch (skierDirection) {
+
+       
+
+        if (rhinoSkierCollide > 0) {
+            eatValue = rhinoEating(rhinoSkierCollide);
+
+            console.log("rhinoSkierCollide : "+rhinoSkierCollide);
+            rhinoDirection = 6 + eatValue;
+            console.log("rhino collide : " + eatValue);
+            if (eatValue > 4) {
+                endGame();
+            }
+        }
+        else if (rhinoDirection !== 0) {
+
+            var collided = checkIfRhinoSkierCollide();
+            if (collided) {
+                rhinoDirection = 5;
+            } else {
+                rhinoDirection = skierDirection;
+            }
+
+        }
+
+
+        console.log("Rhino Direction De" + rhinoDirection);
+
+        switch (rhinoDirection) {
+            case 0:
+                if (rMove <= 1) {
+                    rhinoMapY = skY;
+                    rhinoMapX = skX + Math.floor(gameWidth / 4);
+                } else {
+                    if (rhinoMapX < skX) {
+                        rhinoMapX -= skX;
+                        rhinoSkierCollide = 1;
+
+            skierCanMove = false;
+                    }
+                }
             case 1:
                 rhinoMapX -= rhinoSpeed;
                 break;
@@ -122,17 +179,30 @@ $(document).ready(function () {
                 rhinoMapY += Math.round(rhinoSpeed / 1.4142);
                 break;
             case 3:
-                rhinoMapY += rhinopeed;
+                rhinoMapY += rhinoSpeed;
                 break;
             case 4:
                 rhinoMapX += rhinoSpeed / 1.4142;
                 rhinoMapY += rhinoSpeed / 1.4142;
                 break;
+            case 5:
+
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+                //Collide NO movement
+                rhinoMapX = skX + 8;
+                rhinoMapY = skY;
+                break;
         }
+        rMove++;
+
     }
 
     var moveSkier = function () {
-        if (gamePaused)
+        if (gamePaused || !skierCanMove)
             return;
         var oldx = skierMapX, oldy = skierMapY;
         switch (skierDirection) {
@@ -169,82 +239,157 @@ $(document).ready(function () {
 
         scoreItem = "";
         if (oldX === skierMapX && oldY === skierMapY) {
-
             hasMoved = false;
         } else {
-            scoreItem = "move"; hasMoved = true;
+            scoreItem = "move";
+            hasMoved = true;
         }
 
     }
 
-    var showTopScores = function(){
+
+    var showTopScores = function () {
         var topScores = highestScores();
         $("#topscores ol").html("");
         var scoresLength = topScores.length;
         for (var i = 0; i < scoresLength; i++) {
             $(displaySingleScore(topScores[i])).appendTo("#topscores ol");
-            //Do something
         }
 
     }
 
-    var  displaySingleScore = function(score){
-        return '<li>'+score.name +'   : <strong>'+score.score+'</li>';
+    var displaySingleScore = function (score) {
+        return '<li>' + score.name + '   : <strong>' + score.score + '</li>';
     }
 
     var calculateScore = function () {
         if (hasMoved)
             addScore(actionScores[scoreItem] * (skierSpeed * skierLevel) + 0);
     }
+
     var addScore = function (itemScore) {
         if (!gamePaused) {
-            console.log("Old Score Value :" + skierScore);
             itemScore = isNaN(itemScore) ? 0 : itemScore;
             skierScore += (itemScore + 0);
+            addScoreListeners();
         }
     }
 
+    var addScoreListeners = function () {
+        changeLevel(skierScore, skierSpeed, skierLevel)
+        rhinoChase();
+    }
+
+
+    var changeLevel = function (scores, speed) {
+        var changes = checkLevelChange(scores, speed, skierLevel);
+        console.log("changes: " + JSON.stringify(changes));
+        if (changes.level !== skierLevel) {
+            skierLevel = changes.level;
+            skierSpeed = changes.speed;
+        }
+    }
+
+    var getLevelMaxAmount = function (level) {
+        if (level === 1)
+            return scorePerLevel;
+        else
+            return (Math.pow(1.5, level - 1) * scorePerLevel);
+
+    }
+
+    var checkLevelChange = function (score, speed, level) {
+
+        var levelAmt = getLevelMaxAmount(level);
+        console.log("Level Amt " + level + ": " + levelAmt);
+        //Level change score is exponential by 1.5 exponent the level you are in
+        if (score >= levelAmt) {
+            level += 1;
+            speed += 1;
+        }
+        return { level: level, speed: speed };
+    }
 
     var rhinoChase = function () {
-        if (itemScore >= scoreForChase) {
-            drawRhino();
+        if (skierScore >= scoreForChase) {
+            rhinoAttack = true;
+            rhinoSpeed = skierSpeed;
         }
     }
 
 
-    drawRhino = function () {
+    var drawDemoRhino = function () {
+        var skierImage = loadedAssets["rhino"];
+    }
 
-        ctx.drawImage(skierImage, x, y, skierImage.width, skierImage.height);
+    drawRhino = function () {
+        if (!rhinoAttack)
+            return;
+
+        var skierAssetName = getRhinoAsset();
+        var skierImage = loadedAssets[skierAssetName];
+        ctx.drawImage(skierImage, rhinoMapX, rhinoMapY, skierImage.width, skierImage.height);
     }
 
     var getRhinoAsset = function () {
         var skierAssetName;
-        switch (skierDirection) {
+
+        switch (rhinoDirection) {
             case 0:
-                skierAssetName = 'rhinoEat';
+                skierAssetName = 'rhino';
                 break;
             case 1:
-                skierAssetName = 'rhinoLeft';
+                skierAssetName = 'rhinoRunLeft';
                 break;
             case 2:
-                skierAssetName = 'skierLeftDown';
-                break;
             case 3:
-                skierAssetName = 'skierDown';
-                break;
             case 4:
-                skierAssetName = 'skierRightDown';
+                skierAssetName = 'rhinoRunLeft2';
                 break;
             case 5:
-                skierAssetName = 'skierRight';
+                skierAssetName = 'rhinoLift';
                 break;
-            default:
-                console.log("None FOund : " + skierDirection);
+            case 6:
+                skierAssetName = 'rhinoLiftMouthOpen';
                 break;
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+                skierAssetName = "rhinoLiftEat" + (rhinoDirection - 6);
+                rhinoSkierCollide++;
+                break;
+            //Collide NO movement
         }
+        console.log("rhino Skier : " + skierAssetName);
 
         return skierAssetName;
     };
+
+
+    var rhinoEating = function (eatingCount) {
+        eat = 1;
+        if (eatingCount <= 10) {
+            eat = 1;
+        }
+        else if (eatingCount <= 20) {
+            eat = 2;
+        }
+
+        else if (eatingCount <= 30) {
+            eat = 3;
+        }
+
+        else if (eatingCount <= 40) {
+            eat = 4;
+        }
+        else if (eatingCount > 40) {
+            eat = 5;
+        }
+
+        return eat;
+
+    }
 
     var getSkierAsset = function () {
         var skierAssetName;
@@ -275,13 +420,21 @@ $(document).ready(function () {
         return skierAssetName;
     };
 
+
+
     var drawSkier = function () {
+
         var skierAssetName = getSkierAsset();
         var skierImage = loadedAssets[skierAssetName];
         var x = (gameWidth - skierImage.width) / 2;
         var y = (gameHeight - skierImage.height) / 2;
+        skX = x;
+        skY = y;
+
+
 
         ctx.drawImage(skierImage, x, y, skierImage.width, skierImage.height);
+
     };
 
     var drawObstacles = function () {
@@ -388,6 +541,60 @@ $(document).ready(function () {
         }
     };
 
+
+    var checkIfRhinoSkierCollide = function () {
+        if (rhinoSkierCollide > 0)
+            return rhinoSkierCollide;
+        var skierImage = getSkierImage();
+        var skierRect = getSkierRect(skierImage);
+
+        var rhinoImage = getRhinoAsset();
+        var rhonoRec = getRhinoRect(rhinoImage);
+
+        var collision = intersectRect(skierRect, rhonoRec);
+
+        if (collision) {
+            rhinoSkierCollide = 1;
+            skierCanMove = false;
+        }
+
+
+
+        return collision;
+
+
+    }
+
+    var getRhinoImage = function () {
+
+        var skierAssetName = getRhinoAsset();
+        return loadedAssets[skierAssetName];
+    }
+
+    var getSkierImage = function () {
+
+        var skierAssetName = getSkierAsset();
+        return loadedAssets[skierAssetName];
+    }
+
+    var getSkierRect = function (skierImage) {
+        return {
+            left: skierMapX + gameWidth / 2,
+            right: skierMapX + skierImage.width + gameWidth / 2,
+            top: skierMapY + skierImage.height - 5 + gameHeight / 2,
+            bottom: skierMapY + skierImage.height + gameHeight / 2
+        };
+    }
+
+    var getRhinoRect = function (rhinoImage) {
+        rhino = {
+            left: rhinoImage.x,
+            right: rhinoImage.x + rhinoImage.width,
+            top: rhinoImage.y + rhinoImage.height - 5,
+            bottom: rhinoImage.y + rhinoImage.height
+        };
+    }
+
     var checkIfSkierHitObstacle = function () {
         var skierAssetName = getSkierAsset();
 
@@ -443,19 +650,22 @@ $(document).ready(function () {
         clearCanvas();
 
         moveSkier();
-
+        moveRhino();
         calculateScore();
         displayDetails();
 
         checkIfSkierHitObstacle();
 
         drawSkier();
+        drawRhino();
 
+        drawDemoRhino();
         drawObstacles();
 
         ctx.restore();
 
         requestAnimationFrame(gameLoop);
+
     };
 
     var loadAssets = function () {
@@ -487,8 +697,8 @@ $(document).ready(function () {
         let valueJson = JSON.stringify(oldScores);
         localStorage.setItem(GAME_SCORES, valueJson);
 
-        var topscores= highestScores();
-        
+        var topscores = highestScores();
+
     }
 
     const GAME_SCORES = "GameScores";
@@ -507,9 +717,9 @@ $(document).ready(function () {
     }
 
     var getScores = function (limit, sortAble, sortByField, sortDirection) {
-            const scores = getlocalScores();
-            var list =  _.orderBy(scores, [sortByField],[sortDirection]);
-            return list.slice(1,limit);
+        const scores = getlocalScores();
+        var list = _.orderBy(scores, [sortByField], [sortDirection]);
+        return list.slice(0, limit);
     }
 
     var pauseResume = function () {
@@ -519,8 +729,8 @@ $(document).ready(function () {
 
 
     var endGame = function () {
-        var cname = prompt("Game Ended your score was " + skierScore+"\n\nKindly enter your name.");
-        saveScores(cname,skierScore);
+        var cname = prompt("Game Ended your score was " + skierScore + "\n\nKindly enter your name.");
+        saveScores(cname, skierScore);
         showTopScores();
         reset()
     }
@@ -569,11 +779,11 @@ $(document).ready(function () {
                     break;
 
                 case 70: //F for faster
-                    skierSpeed *= 2;
+                    skierSpeed += 1;
                     event.preventDefault();
                     break;
                 case 68: //d for slower
-                    skierSpeed /= 2;
+                    skierSpeed -= 1;
                     event.preventDefault();
                     break;
                 case 82: //R for reset of the game
@@ -589,17 +799,24 @@ $(document).ready(function () {
     };
 
     var defaultSettings = function () {
-         skierDirection = 5;
-         skierMapX = 0;
-         skierMapY = 0;
-         skierSpeed = 8;
-         skierLevel = 1;
-         skierScore = 0;
-         gamePaused = false;
-         livesCount = maxCollisions;
-       
+        skierDirection = 5;
+        skierMapX = 0;
+        skierMapY = 0;
+        skierSpeed = 8;
+        skierLevel = 1;
+        skierScore = 0;
+        gamePaused = false;
+        livesCount = maxCollisions;
 
-         loadedAssets = {};
+
+        rhinoSpeed = skierSpeed * 1.2;
+        rhinoMapX = 0;
+        rhinoMapY = 0;
+        rhinoAttack = false;
+        rhinoDirection = 1;
+        rhinoSkierCollid = 0;
+
+        loadedAssets = {};
 
         obstacleTypes = [
             'tree',
