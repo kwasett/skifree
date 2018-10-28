@@ -89,8 +89,9 @@ $(document).ready(function () {
     var skierLevel = 1;
     var scorePerLevel = 4000;
     var skierScore = 0;
-    var scoreForChase = 1000;
-
+    var scoreForChase = 5000;
+    var showRhino = true;
+    var oldDirection = 1;
 
 
     var rhinoSpeed = skierSpeed;
@@ -107,6 +108,8 @@ $(document).ready(function () {
 
     var hasMoved = false;
     var skierCanMove = true;
+    var skierJumping = false;
+    var skierJumpingCount = 0;
 
 
 
@@ -128,16 +131,16 @@ $(document).ready(function () {
     }
 
     var moveRhino = function () {
-        if (gamePaused || !rhinoAttack)
+        if (!showRhino || gamePaused || !rhinoAttack)
             return;
 
 
-       
+
 
         if (rhinoSkierCollide > 0) {
             eatValue = rhinoEating(rhinoSkierCollide);
 
-            console.log("rhinoSkierCollide : "+rhinoSkierCollide);
+            console.log("rhinoSkierCollide : " + rhinoSkierCollide);
             rhinoDirection = 6 + eatValue;
             console.log("rhino collide : " + eatValue);
             if (eatValue > 4) {
@@ -168,7 +171,7 @@ $(document).ready(function () {
                         rhinoMapX -= skX;
                         rhinoSkierCollide = 1;
 
-            skierCanMove = false;
+                        skierCanMove = false;
                     }
                 }
             case 1:
@@ -223,11 +226,19 @@ $(document).ready(function () {
                 placeNewObstacle(skierDirection);
                 break;
             case 4:
-                skierMapX += skierSpeed / 1.4142;
-                skierMapY += skierSpeed / 1.4142;
+                    skierMapX += skierSpeed / 1.4142;
+                    skierMapY += skierSpeed / 1.4142;
+    
+                    placeNewObstacle(skierDirection);
+                    break;
+            case 6:
 
-                placeNewObstacle(skierDirection);
-                break;
+                    var xy = jumpCoordinates(skierJumpingCount,16,skierMapX,skierMapY)
+                        skierMapX = xy.x;
+                        skierMapY = xy.y;
+        
+                        placeNewObstacle(skierDirection);
+                        break;
         }
 
         skierMoved(oldx, oldy);
@@ -412,6 +423,9 @@ $(document).ready(function () {
             case 5:
                 skierAssetName = 'skierRight';
                 break;
+            case 6:
+                skierAssetName = "skierJump" + jumpToShow(skierJumpingCount);
+                break;
             default:
                 console.log("None FOund : " + skierDirection);
                 break;
@@ -421,13 +435,43 @@ $(document).ready(function () {
     };
 
 
+    var jumpToShow = function (jumpCount) {
+        var jump = Math.floor(jumpCount / 20) + 1;
 
+        if (jumpCount >= 100) {
+            jump = 5;
+            jumpStop();
+        }
+        console.log("Jumping at : " + jump)
+        return jump;
+
+    }
+
+
+    var jumpCoordinates = function (jumpCount, width,x, y) {
+
+        var jumpCountToShow = jumpToShow(jumpCount);
+
+        //Greater than 3 
+        if (jumpCountToShow > 3) {
+            y -=((5 - jumpCountToShow) * skierSpeed)
+        } else if (jumpCountToShow <= 3) {
+            y +=((jumpCountToShow) * skierSpeed)
+        }
+        skierJumpingCount++;
+        return { x: x, y: y };
+
+    }
     var drawSkier = function () {
-
         var skierAssetName = getSkierAsset();
         var skierImage = loadedAssets[skierAssetName];
         var x = (gameWidth - skierImage.width) / 2;
         var y = (gameHeight - skierImage.height) / 2;
+        if (skierJumping) {
+            var xy = jumpCoordinates(skierJumpingCount, skierImage.width/2,x, y)
+            x = xy.x;
+            y = xy.y;
+        }
         skX = x;
         skY = y;
 
@@ -710,6 +754,21 @@ $(document).ready(function () {
             return JSON.parse(scores)
     }
 
+    var jumpSkier = function () {
+        console.log("Jumping Console :  INitiated");
+        skierJumpingCount = 1;
+        skierJumping = true;
+        oldDirection = skierDirection;
+        skierDirection = 6;
+    }
+
+    var jumpStop = function () {
+        skierJumpingCount = 0;
+        skierJumping = false;
+        skierDirection = oldDirection;
+
+    }
+
     var highestScores = function () {
         var scores = getScores(10, true, "score", "desc");
         console.log(JSON.stringify(scores));
@@ -726,8 +785,6 @@ $(document).ready(function () {
         gamePaused = !gamePaused;
     }
 
-
-
     var endGame = function () {
         var cname = prompt("Game Ended your score was " + skierScore + "\n\nKindly enter your name.");
         saveScores(cname, skierScore);
@@ -736,65 +793,61 @@ $(document).ready(function () {
     }
 
 
+    var keyEventsHandler = function (keypressed) {
+        switch (keypressed) {
+            case 37: // left
+                if (skierDirection === 1) {
+                    skierMapX -= skierSpeed;
+                    placeNewObstacle(skierDirection);
+                }
+                else {
+                    skierDirection = 1;
+                }
+                break;
+            case 39: // right
+                if (skierDirection === 5) {
+                    skierMapX += skierSpeed;
+                    placeNewObstacle(skierDirection);
+                }
+                else {
+                    skierDirection++;
+                }
+                break;
+            case 38: // up
+                if (skierDirection === 1 || skierDirection === 5) {
+                    skierMapY -= skierSpeed;
+                    placeNewObstacle(6);
+                }
+                break;
+            case 40: // down
+                skierDirection = 3;
+                break;
+            case 32: //spacebar
+                pauseResume();
+                break;
+
+            case 70: //F for faster
+                skierSpeed += 1;
+                break;
+            case 68: //d for slower
+                skierSpeed -= 1;
+                break;
+            case 82: //R for reset of the game
+                reset();
+            case 74: //J for reset of the game
+                jumpSkier();
+
+                break;
+
+
+
+        }
+    }
     var setupKeyhandler = function () {
         $(window).keydown(function (event) {
             console.log("Key Presed : " + event.which);
-            switch (event.which) {
-                case 37: // left
-
-                    if (skierDirection === 1) {
-                        skierMapX -= skierSpeed;
-                        placeNewObstacle(skierDirection);
-                    }
-                    else {
-                        console.log("Key AM sure colided : " + skierDirection);
-                        skierDirection = 1;
-                    }
-                    event.preventDefault();
-                    break;
-                case 39: // right
-                    if (skierDirection === 5) {
-                        skierMapX += skierSpeed;
-                        placeNewObstacle(skierDirection);
-                    }
-                    else {
-                        skierDirection++;
-                    }
-                    event.preventDefault();
-                    break;
-                case 38: // up
-                    if (skierDirection === 1 || skierDirection === 5) {
-                        skierMapY -= skierSpeed;
-                        placeNewObstacle(6);
-                    }
-                    event.preventDefault();
-                    break;
-                case 40: // down
-                    skierDirection = 3;
-                    event.preventDefault();
-                    break;
-                case 32: //spacebar
-                    pauseResume();
-                    event.preventDefault();
-                    break;
-
-                case 70: //F for faster
-                    skierSpeed += 1;
-                    event.preventDefault();
-                    break;
-                case 68: //d for slower
-                    skierSpeed -= 1;
-                    event.preventDefault();
-                    break;
-                case 82: //R for reset of the game
-
-                    reset();
-                    event.preventDefault();
-                    break;
-
-
-
-            }
+            keyEventsHandler(event.which);
+            event.preventDefault();
         });
     };
 

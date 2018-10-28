@@ -2,9 +2,40 @@
 
 Welcome to the Ceros Code Challenge - Ski Edition!
 
+
+The Game can be accessed via https://skifee.herokuapp.com/ . To play the game just use the down button.
+
+What was done
+* Fix left bug after a crush
+* Implemented Jump
+* Implemented Scores
+* Top Scorers Chat
+* Rhino showing after skeing for a long
+* Pause and Resume of game
+* Increase and decrease of game speed
+* Implementation of Levels
+
+
+Keys that can be use 
+* Down Arrow key to move down or start the game
+* F key to move the skier faster increases the speed by 1.
+* D key to move the skier slower decreases the speed by 1
+* J key to jump
+* R key to Reset/Restart the game
+* Space bar for pause or resume game
+
+
+Scores:
+* Scores are calculated per move is calculated by Speed of Skier * Level * 10 for a successful move
+* Deduct 50 for a crush with any obstacle
+* Deduct 100 for a Rhino Crush
+
+
+
+----------------
 For this challenge, we have included some base code for Ceros Ski, our version of the classic Windows game SkiFree. If
 you've never heard of SkiFree, Google has plenty of examples. Better yet, you can play our version here: 
-http://ceros-ski.herokuapp.com/  
+
 
 We understand that everyone has varying levels of free time, so take a look through the requirements below and let us 
 know when you will have something for us to look at (we also get to see how well you estimate and manage your time!). 
@@ -25,13 +56,15 @@ Requirements:
     1. Press the left arrow key
   * Expected Result: The skier gets up and is facing to the left
   * Actual Result: Giant blizzard occurs causing the screen to turn completely white (or maybe the game just crashes!)
+
+  
 * The game's a bit boring as it is. Add a new feature to the game to make it more enjoyable. Some ideas are:
   * Implement jumps. The asset file for jumps is already included. All you gotta do is make the guy jump. We even included
       some jump trick assets if you wanted to get really fancy!
   * Add a score. How will you know that you're the best Ceros Skier if there's no score? Maybe store that score
       somewhere so that it is persisted across browser refreshes.
   * Feed the hungry Rhino. In the original Ski Free game, if you skied for too long, a yeti would chase you
-      down and eat you. In Ceros Ski, we've provided assets for a Rhino to catch the skier.
+      down and eat you.   In Ceros Ski, we've provided assets for a Rhino to catch the skier.
 * Update this README file with your comments about your work; what was done, what wasn't, features added & known bugs.
 * Provide a way for us to view the completed code and run it, either locally or through a cloud provider
 * Be original. Don’t copy someone else’s game implementation!
