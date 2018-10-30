@@ -34,6 +34,8 @@ Scores:
 Known Bugs
 * The Rhino its almost inevitable to get pass him as it follows using the skier location
 
+* Test not totally exhaustive
+
 ----------------
 For this challenge, we have included some base code for Ceros Ski, our version of the classic Windows game SkiFree. If
 you've never heard of SkiFree, Google has plenty of examples. Better yet, you can play our version here: 

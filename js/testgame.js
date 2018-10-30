@@ -9,6 +9,8 @@ $(document).ready(function () {
 
     var rhinoCtl = rhinoActions(settings);
     var scores = scoreCal(settings, rhinoCtl, level);
+    var itemKey = "tempsave";
+    var highScore = higestScores(localStorage, itemKey);
 
 
 
@@ -34,23 +36,41 @@ $(document).ready(function () {
 
     QUnit.test("Score Collide", function (assert) {
         scores.addMoveScore("collide");
-        assert.ok(settings.skierScore == 20, "Passed! "+settings.skierScore);
+        assert.ok(settings.skierScore == 20, "Passed! " + settings.skierScore);
     });
 
 
 
     QUnit.test("Level Amount For Level 1", function (assert) {
-        var levelAMount  = level.getLevelMaxAmount(1);
+        var levelAMount = level.getLevelMaxAmount(1);
         assert.ok(levelAMount == settings.scorePerLevel, "Passed! ");
     });
-    
+
     QUnit.test("Level Amount For Level 3", function (assert) {
-        var levelAMount  = level.getLevelMaxAmount(3);
+        var levelAMount = level.getLevelMaxAmount(3);
         assert.ok(levelAMount == 9000, "Passed! ");
     });
 
     QUnit.test("Rhino Can chase", function (assert) {
-       rhinoCtl.rhinoChase(4000,3000)
+        rhinoCtl.rhinoChase(4000, 3000)
         assert.ok(settings.rhinoAttack == true, "Passed! ");
+    });
+
+    highScore.saveScore("kofi", "900")
+    highScore.saveScore("ama", "500")
+    var topScores = highScore.topRank();
+    QUnit.test("Save Score", function (assert) {
+        
+        assert.ok(topScores.length == 2, "Passed! ");
+
+        
+    });
+
+
+    QUnit.test("Highest Score on top", function (assert) {
+        
+        assert.ok(topScores[0].score == 900, "Passed! ");
+        assert.ok(topScores[0].name == "kofi", "Passed! ");
+        localStorage.removeItem(itemKey);
     });
 })

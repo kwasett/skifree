@@ -1,6 +1,8 @@
-var higestScores = function(storage){
+var higestScores = function(storage,scoresName){
 
-    const GAME_SCORES = "GameScores";
+    var GAME_SCORES =scoresName;
+    if(!scoresName)
+     GAME_SCORES = "GameScores";
     var getlocalScores = function () {
         const scores = storage.getItem(GAME_SCORES);
         if (!scores) {
