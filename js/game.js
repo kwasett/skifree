@@ -302,7 +302,7 @@ $(document).ready(function () {
     var checkLevelChange = function (score, speed, level) {
 
         var levelAmt = getLevelMaxAmount(level);
-        console.log("Level Amt " + level + ": " + levelAmt);
+        
         //Level change score is exponential by 1.5 exponent the level you are in
         if (score >= levelAmt) {
             level += 1;
@@ -584,14 +584,12 @@ $(document).ready(function () {
     var checkIfRhinoSkierCollide = function () {
         if (rhinoSkierCollide > 0)
             return rhinoSkierCollide;
-        var skierImage = getSkierImage();
+        var skierImage = getSkierImage(skierDirection);
         var skierRect = getSkierRect(skierImage);
 
         var rhinoImage = getRhinoAsset();
         var rhonoRec = getRhinoRect(rhinoImage);
-
         var collision = intersectRect(skierRect, rhonoRec);
-
         if (collision) {
             rhinoSkierCollide = 1;
             skierCanMove = false;
@@ -610,7 +608,7 @@ $(document).ready(function () {
         return loadedAssets[skierAssetName];
     }
 
-    var getSkierImage = function () {
+    var getSkierImage = function (skierDirection) {
 
         var skierAssetName = getSkierAsset(skierDirection);
         return loadedAssets[skierAssetName];

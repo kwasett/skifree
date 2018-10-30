@@ -3,7 +3,7 @@
 Welcome to the Ceros Code Challenge - Ski Edition!
 
 
-The Game can be accessed via https://skifee.herokuapp.com/ . To play the game just use the down button.
+The Game can be accessed via https://skifree.herokuapp.com/ . To play the game just use the down button.
 
 What was done
 * Fix left bug after a crush
@@ -30,7 +30,8 @@ Scores:
 * Deduct 50 for a crush with any obstacle
 * Deduct 100 for a Rhino Crush
 
-
+Known Bugs
+* The Rhino its almost inevitable to get pass him as it follows using the skier location
 
 ----------------
 For this challenge, we have included some base code for Ceros Ski, our version of the classic Windows game SkiFree. If
