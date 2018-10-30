@@ -20,6 +20,7 @@ $(document).ready(function () {
 
     QUnit.test("Score Calculator Per move", function (assert) {
 
+        settings.hasMoved = true;
 
         scores.addMoveScore("move");
         scores.addMoveScore("move");
@@ -28,7 +29,11 @@ $(document).ready(function () {
         scores.addMoveScore("move");
         scores.addMoveScore("move");
         scores.addMoveScore("move");
-        assert.ok(settings.skierScore == 70, "Passed!");
+        scores.addMoveScore("move");
+        scores.addMoveScore("move");
+        scores.addMoveScore("move");
+        settings.hasMoved = false;
+        assert.ok(settings.skierScore == 10*settings.skierSpeed, "Passed!");
     });
 
 
@@ -36,7 +41,7 @@ $(document).ready(function () {
 
     QUnit.test("Score Collide", function (assert) {
         scores.addMoveScore("collide");
-        assert.ok(settings.skierScore == 20, "Passed! " + settings.skierScore);
+        assert.ok(settings.skierScore == 0, "Passed! " + settings.skierScore);
     });
 
 

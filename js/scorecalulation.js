@@ -13,8 +13,10 @@ var scoreCal = function (gameControls, rhinoCtrl, levelMgt) {
 
 
     var addMoveScore = function (item) {
-        if (item == "move")
-            calculateScore(actionScores[item]);
+        if (item == "move"){
+            addScore(actionScores[item] * (gameControls.skierSpeed * gameControls.skierLevel) + 0);
+        }
+           
         else
             addScore(actionScores[item]);
     }
