@@ -1,4 +1,4 @@
-# Ceros Ski Code Challenge
+# Ceros Ski Code Challenge  By Seth
 
 Welcome to the Ceros Code Challenge - Ski Edition!
 
@@ -10,10 +10,10 @@ What was done
 * Implemented Jump
 * Implemented Scores
 * Top Scorers Chat
-* Rhino showing after skeing for a long
 * Pause and Resume of game
 * Increase and decrease of game speed
 * Implementation of Levels
+* Rhino showing after skieing for a long
 
 
 Keys that can be use 
