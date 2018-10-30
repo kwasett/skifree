@@ -1,6 +1,6 @@
 # Ceros Ski Code Challenge  By Seth
 
-Welcome to the Ceros Code Challenge - Ski Edition!
+Welcome to the Ceros Code Challenge - Ski Edition! by Seth
 
 
 The Game can be accessed via https://skifree.herokuapp.com/ . To play the game just use the down button.
