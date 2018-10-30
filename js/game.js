@@ -598,11 +598,11 @@ $(document).ready(function () {
         if (rhinoSkierCollide > 0)
             return rhinoSkierCollide;
         var skierImage = getSkierImage(skierDirection);
-        var skierRect = getSkierRect(skierImage);
+        var skierRect  = getSkierRect(skierImage);
 
         var rhinoImage = getRhinoAsset();
-        var rhonoRec = getRhinoRect(rhinoImage);
-        var collision = intersectRect(skierRect, rhonoRec);
+        var rhonoRec   = getRhinoRect(rhinoImage);
+        var collision  = intersectRect(skierRect, rhonoRec);
         if (collision) {
             rhinoSkierCollide = 1;
             skierCanMove = false;
@@ -841,6 +841,7 @@ $(document).ready(function () {
                 break;
             case 82: //R for reset of the game
                 reset();
+                break;
             case 74: //J for reset of the game
                 jumpSkier();
 
@@ -907,7 +908,7 @@ $(document).ready(function () {
     var reset = function () {
         defaultSettings();
         
-        initGame(gameLoop);
+        gameLoop();
     }
 
     var initGame = function () {

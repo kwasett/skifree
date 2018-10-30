@@ -12,21 +12,20 @@
   <div id="qunit-fixture"></div>
 
   <!-- <script src="https://code.jquery.com/qunit/qunit-2.7.1.js"></script> -->
-  <script src="js/gameformatted.js"></script>
+  <script src="js/assets.js"></script>
+  <script src="js/scores.js"></script>
   <script >
-     myFeature.myProperty === "hello"; // true
+   var assets = assets(123);
+   assets.loadAssets().then(function () {
+  
+    });
+
+    var scores  = higestScores(localStorage);
+  scores.saveScore("kofi", 123);
+
+var sch = scores.topRank();
+console.log("Higest Scores"+JSON.stringify(sch));
  
- myFeature.myMethod(); // "hello"
-  
- myFeature.init({
-     foo: "bar"
- });
-  
- myFeature.readSettings(); // { foo: "bar" }
-
-
-var game = gameControls();
- console.log(JSON.stringify(game.stop()));
   </script>
 </body>
 </html>
