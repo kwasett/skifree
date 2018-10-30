@@ -39,8 +39,6 @@ $(document).ready(function () {
         'rhinoEat': -1000
     };
 
-
-
     var loadedAssets = {};
 
     var obstacleTypes = [
@@ -63,6 +61,8 @@ $(document).ready(function () {
             border: 'solid 2px #ddd',
             float: 'left'
         });
+
+
     var details = $('<div></div>')
         .attr("id", "details")
         .css({
@@ -78,6 +78,7 @@ $(document).ready(function () {
         .append($("<div>Status : <span></span></div>").attr("id", "status"))
         .append($("<div><br /><br /><h3>Top Scores</h3><ol></ol></div>").attr("id", "topscores"));
     $('body').append(details).append(canvas);
+
     var ctx = canvas[0].getContext('2d');
 
     var skierDirection = 5;
@@ -85,11 +86,12 @@ $(document).ready(function () {
     var skierMapY = 0;
 
     var skX, skY = 0;
-    var skierSpeed = 8;
+    var defaultSpeed = 8;
+    var skierSpeed = defaultSpeed;
     var skierLevel = 1;
     var scorePerLevel = 4000;
     var skierScore = 0;
-    var scoreForChase = 5000;
+    var scoreForChase = 1000;
     var showRhino = true;
     var oldDirection = 1;
 
@@ -97,9 +99,11 @@ $(document).ready(function () {
     var rhinoSpeed = skierSpeed;
     var rhinoMapX = 0;
     var rhinoMapY = 0;
+    var rhinoRadius =0;
     var rhinoAttack = false;
     var rhinoDirection = 0;
     var rhinoSkierCollide = 0;
+    var rhinoCenterCoordinates={x:0, y:0};
 
     var maxCollisions = 3;
     var livesCount = maxCollisions;
@@ -110,8 +114,6 @@ $(document).ready(function () {
     var skierCanMove = true;
     var skierJumping = false;
     var skierJumpingCount = 0;
-
-
 
     //tobe delete
 
@@ -130,6 +132,12 @@ $(document).ready(function () {
         $("#status span").html(gamePaused ? "Paused" : "Playing");
     }
 
+    var rhinoPosition =function(x,centerxy,radius, speed){
+        x-=speed;
+        y = Math.sqrt(Math.pow(radius,2) - Math.pow(x-centerxy.x,2)) +centerxy.y
+        console.log("RHino Pos : {"+x+","+y+"}");
+        return {x,y};
+    }
     var moveRhino = function () {
         if (!showRhino || gamePaused || !rhinoAttack)
             return;
@@ -141,6 +149,7 @@ $(document).ready(function () {
                 endGame();
             }
         }
+
         else if (rhinoDirection !== 0) {
 
             var collided = checkIfRhinoSkierCollide();
@@ -155,14 +164,21 @@ $(document).ready(function () {
         switch (rhinoDirection) {
             case 0:
                 if (rMove <= 1) {
-                    rhinoMapY = skY;
-                    rhinoMapX = skX + Math.floor(gameWidth / 4);
+                    rhinoRadius = (gameWidth/4)+(defaultSpeed*5);
+                    rhinoCenterCoordinates = {y:skY-rhinoRadius, x:skX}
+                    rhinoMapX= rhinoCenterCoordinates.x+rhinoRadius;
+                    var posRhino = rhinoPosition(rhinoMapX,rhinoCenterCoordinates,rhinoRadius,skierSpeed)
+                    rhinoMapY = posRhino.y;
                 } else {
                     if (rhinoMapX < skX) {
                         rhinoMapX -= skX;
                         rhinoSkierCollide = 1;
 
                         skierCanMove = false;
+                    }else{
+                        var posRhino = rhinoPosition(rhinoMapX,rhinoCenterCoordinates,rhinoRadius,skierSpeed)
+                        rhinoMapY = posRhino.y;
+                        rhinoMapX = posRhino.x;
                     }
                 }
             case 1:
@@ -186,7 +202,6 @@ $(document).ready(function () {
             case 8:
             case 9:
             case 10:
-                //Collide NO movement
                 rhinoMapX = skX + 8;
                 rhinoMapY = skY;
                 break;
@@ -245,7 +260,6 @@ $(document).ready(function () {
             scoreItem = "move";
             hasMoved = true;
         }
-
     }
 
     var showTopScores = function () {
@@ -277,7 +291,7 @@ $(document).ready(function () {
 
     var addScoreListeners = function (scoreJustAdded,skierScore, skierSpeed, skierLevel) {
         changeLevel(skierScore, skierSpeed, skierLevel)
-        var rhino = rhinoChase(skierScore);
+        var rhino = rhinoChase(skierScore,scoreForChase);
         rhinoSpeed = rhino.speed;
         rhinoAttack = rhino.attack;
     }
@@ -329,9 +343,9 @@ $(document).ready(function () {
     drawRhino = function () {
         if (!rhinoAttack)
             return;
-
         var skierAssetName = getRhinoAsset();
         var skierImage = loadedAssets[skierAssetName];
+        console.log("Rhino Pos Draw {"+rhinoMapX+":::"+rhinoMapY+"}")
         ctx.drawImage(skierImage, rhinoMapX, rhinoMapY, skierImage.width, skierImage.height);
     }
 
@@ -439,7 +453,6 @@ $(document).ready(function () {
 
     }
 
-
     var jumpCoordinates = function (jumpCount, width,x, y) {
 
         var jumpCountToShow = jumpToShow(jumpCount);
@@ -464,12 +477,12 @@ $(document).ready(function () {
         var y = (gameHeight - skierImage.height) / 2;
         if (skierJumping) {
             var xy = jumpCoordinates(skierJumpingCount, skierImage.width/2,x, y)
-            x = xy.x;
-            y = xy.y;
+            skX = xy.x;
+            skY = xy.y;
+        }else {
+            skX = x;
+            skY = y;
         }
-        skX = x;
-        skY = y;
-
 
 
         ctx.drawImage(skierImage, x, y, skierImage.width, skierImage.height);
@@ -781,11 +794,13 @@ $(document).ready(function () {
         var cname = prompt("Game Ended your score was " + skierScore + "\n\nKindly enter your name.");
         saveScores(cname, skierScore);
         showTopScores();
+       
         reset()
     }
 
 
     var keyEventsHandler = function (keypressed) {
+        console.log("Keypressed : "+keypressed);
         switch (keypressed) {
             case 37: // left
                 if (skierDirection === 1) {
@@ -836,6 +851,7 @@ $(document).ready(function () {
         }
     }
     var setupKeyhandler = function () {
+
         $(window).keydown(function (event) {
             keyEventsHandler(event.which);
             event.preventDefault();
@@ -843,24 +859,39 @@ $(document).ready(function () {
     };
 
     var defaultSettings = function () {
-        skierDirection = 5;
-        skierMapX = 0;
-        skierMapY = 0;
-        skierSpeed = 8;
-        skierLevel = 1;
-        skierScore = 0;
-        gamePaused = false;
-        livesCount = maxCollisions;
-
-
-        rhinoSpeed = skierSpeed * 1.2;
-        rhinoMapX = 0;
-        rhinoMapY = 0;
-        rhinoAttack = false;
-        rhinoDirection = 1;
-        rhinoSkierCollid = 0;
-
-        loadedAssets = {};
+         skierDirection = 5;
+         skierMapX = 0;
+         skierMapY = 0;
+    
+         skX, skY = 0;
+         defaultSpeed = 8;
+         skierSpeed = defaultSpeed;
+         skierLevel = 1;
+         scorePerLevel = 4000;
+         skierScore = 0;
+         scoreForChase = 1000;
+         showRhino = true;
+         oldDirection = 1;
+    
+    
+         rhinoSpeed = skierSpeed;
+         rhinoMapX = 0;
+         rhinoMapY = 0;
+         rhinoRadius =0;
+         rhinoAttack = false;
+         rhinoDirection = 0;
+         rhinoSkierCollide = 0;
+         rhinoCenterCoordinates={x:0, y:0};
+    
+         maxCollisions = 3;
+         livesCount = maxCollisions;
+         gamePaused = false;
+         scoreItem = "";
+    
+         hasMoved = false;
+         skierCanMove = true;
+         skierJumping = false;
+         skierJumpingCount = 0;
 
         obstacleTypes = [
             'tree',
@@ -875,6 +906,7 @@ $(document).ready(function () {
 
     var reset = function () {
         defaultSettings();
+        
         initGame(gameLoop);
     }
 
