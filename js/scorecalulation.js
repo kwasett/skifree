@@ -11,6 +11,10 @@ var scoreCal = function(gameControls, rhinoCtrl,levelMgt){
             addScore(actionScores[scoreItem] * (gameControls.skierSpeed * gameControls.skierLevel) + 0);
     }
 
+
+    var addMoveScore = function (item) {
+        addScore(actionScores[item]);
+    }
     var addScore = function (itemScore) {
         if (!gameControls.gamePaused) {
             itemScore = isNaN(itemScore) ? 0 : itemScore;
@@ -26,7 +30,7 @@ var scoreCal = function(gameControls, rhinoCtrl,levelMgt){
         rhinoAttack = rhin.attack;
     }
 
-    return {calculateScore, addScore, addScoreListeners}
+    return {calculateScore, addScore, addScoreListeners,addMoveScore}
 
 
 }

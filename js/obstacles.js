@@ -116,5 +116,5 @@ var obstacles = function(ctx,gameSetting,asset){
         }
     };
 
-    return {reset,drawObstacles, placeInitialObstacles, placeNewObstacle, placeRandomObstacle, calculateOpenPosition};
+    return {reset,drawObstacles, placeInitialObstacles, placeNewObstacle, placeRandomObstacle, calculateOpenPosition, obstacles};
 }

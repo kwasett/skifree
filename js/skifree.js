@@ -9,7 +9,7 @@ var defaultSettings = {
     skierLevel : 1,
     scorePerLevel : 4000,
     skierScore : 0,
-    scoreForChase : 1000,
+    scoreForChase : 5000,
     showRhino : true,
     oldDirection : 1,
 
@@ -47,62 +47,16 @@ var defaultSettings = {
 };
 
 var gameSetting = defaultSettings;
-var gameControl = function (gameSetting) {
+var gameControl = function () {
     startGame = function () {
+        console.log("startGame Wow")
+        gameSetting = defaultSettings;
+        skifree()
 
+        console.log("startGame End")
     }
 
-    var pauseResume = function () {
-        gameSetting.gamePaused = !gamePaused;
-    }
-
-
-    var defaultSettings = function () {
-        skierDirection = 5;
-        skierMapX = 0;
-        skierMapY = 0;
-
-        skX, skY = 0;
-        defaultSpeed = 8;
-        skierSpeed = defaultSpeed;
-        skierLevel = 1;
-        scorePerLevel = 4000;
-        skierScore = 0;
-        scoreForChase = 1000;
-        showRhino = true;
-        oldDirection = 1;
-
-
-        rhinoSpeed = skierSpeed;
-        rhinoMapX = 0;
-        rhinoMapY = 0;
-        rhinoRadius = 0;
-        rhinoAttack = false;
-        rhinoDirection = 0;
-        rhinoSkierCollide = 0;
-        rhinoCenterCoordinates = { x: 0, y: 0 };
-
-        maxCollisions = 3;
-        livesCount = 3;
-        gamePaused = false;
-        scoreItem = "";
-
-        hasMoved = false;
-        skierCanMove = true;
-        skierJumping = false;
-        skierJumpingCount = 0;
-
-        obstacleTypes = [
-            'tree',
-            'treeCluster',
-            'rock1',
-            'rock2'
-        ];
-
-        obstacles = [];
-
-    };
-
+    return {startGame}
 }
 
 var gameHtml = function () {
@@ -138,14 +92,12 @@ var skifree = function () {
  gameSetting.gameHeight = window.innerHeight;
  var html = gameHtml();
 
-
-
  console.log(JSON.stringify(gameSetting));
 
     
     var canvas = html.canvas;
     var details = html.details;
-    $('body').append(details).append(canvas);
+    $('body').html("").append(details).append(canvas);
 
     var ctx = canvas[0].getContext('2d');
     var jump = jumper(gameSetting);
@@ -156,7 +108,7 @@ var skifree = function () {
   
     var rhinoCtl = rhinoActions(gameSetting);
     var scoreCalculation = scoreCal(gameSetting, rhinoCtl, level)
-    var collision = collisions(gameSetting, asset, scoreCalculation);
+    var collision = collisions(gameSetting, asset, scoreCalculation,obstacle);
     var rhino = rhinoItem(gameSetting, canvas, ctx, asset, collision);
     var skier = skierItem(gameSetting, ctx, asset, jump, obstacle,scoreCalculation);
 
@@ -258,7 +210,9 @@ var skifree = function () {
             var cname = prompt("Game Ended your score was " + gameSetting.skierScore + "\n\nKindly enter your name.");
             scores.saveScores(cname, gameSetting.skierScore);
             scores.showTopScores();
+            gameSetting.gameEnded = false;
             restart();
+
             
         }
     }
@@ -285,9 +239,9 @@ var skifree = function () {
 
 
     var restart = function () {
-        gameSetting.gameEnded = false;
-        gameSetting = defaultSettings;
-        skifree();
+        console.log("reseting");
+        var gmCtrl = gameControl();
+        gmCtrl.startGame();
     }
 
 
@@ -300,7 +254,8 @@ var skifree = function () {
 }
 
 $(document).ready(function () {
-skifree();
+    var gmCtrl = gameControl();
+    gmCtrl.startGame();
 
 });
 

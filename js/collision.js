@@ -1,12 +1,12 @@
 
-var collisions= function(gameSetting,assets,scorecalc){
+var collisions= function(gameSetting,assets,scorecalc,obstacleItem){
     var rhinoSkierCollide = function () {
         if (gameSetting.rhinoSkierCollide > 0)
             return rhinoSkierCollide;
         var skierImage = assets.getSkierImage(gameSetting.skierDirection);
         var skierRect = getSkierRect(skierImage);
 
-        var rhinoImage = getRhinoAsset(gameSetting.rhinoDirection);
+        var rhinoImage = assets.getRhinoAsset(gameSetting.rhinoDirection);
         var rhonoRec = getRhinoRect(rhinoImage);
         var collision = intersectRect(skierRect, rhonoRec);
         if (collision) {
@@ -29,7 +29,10 @@ var collisions= function(gameSetting,assets,scorecalc){
             bottom: gameSetting.skierMapY + skierImage.height + gameSetting.gameHeight / 2
         };
 
-        var collision = _.find(obstacles, function (obstacle) {
+
+
+       
+        var collision = _.find(obstacleItem.obstacles, function (obstacle) {
             var obstacleImage = assets.loadedAssets[obstacle.type];
             var obstacleRect = {
                 left: obstacle.x,
@@ -38,14 +41,15 @@ var collisions= function(gameSetting,assets,scorecalc){
                 bottom: obstacle.y + obstacleImage.height
             };
 
+
             return intersectRect(skierRect, obstacleRect);
         });
 
         if (collision) {
             if (gameSetting.skierDirection !== 0) {
                 gameSetting.livesCount--;
-                scorecalc.addScore(actionScores["collide"]);
-                if (livesCount <= 0) {
+                scorecalc.addMoveScore("collide");
+                if (gameSetting.livesCount <= 0) {
                     console.log("Reached Max Collission")
                     //gameSetting.endGame()
                     gameSetting.gameEnded = true;
@@ -62,6 +66,24 @@ var collisions= function(gameSetting,assets,scorecalc){
             r2.bottom < r1.top);
     };
 
+
+    var getSkierRect = function (skierImage) {
+        return {
+            left: gameSetting.rskierMapX + gameSetting.gameWidth / 2,
+            right: gameSetting.rskierMapX + skierImage.width + gameSetting.gameWidth / 2,
+            top: gameSetting.rskierMapY + skierImage.height - 5 + gameSetting.gameHeight / 2,
+            bottom: gameSetting.rskierMapY + skierImage.height + gameSetting.gameHeight / 2
+        };
+    }
+
+    var getRhinoRect = function (rhinoImage) {
+        rhino = {
+            left: rhinoImage.x,
+            right: rhinoImage.x + rhinoImage.width,
+            top: rhinoImage.y + rhinoImage.height - 5,
+            bottom: rhinoImage.y + rhinoImage.height
+        };
+    }
 
     return{rhinoSkierCollide,skierHitObstacle,intersectRect}
 }
