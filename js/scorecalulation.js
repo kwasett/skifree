@@ -1,7 +1,7 @@
 var scoreCal = function(gameControls, rhinoCtrl,levelMgt){
     
     var actionScores = {
-        'move': 1,
+        'move': 10,
         'collide': -50,
         'rhinoEat': -100
     };

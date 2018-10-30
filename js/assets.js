@@ -63,7 +63,7 @@ var assets = function(gameSetting,skierJumpingCount,jump){
                 skierAssetName = 'skierRight';
                 break;
             case 6:
-                skierAssetName = "skierJump" + jump.jumpToShow(skierJumpingCount);
+                skierAssetName = "skierJump" + jump.jumpToShow(gameSetting.skierJumpingCount);
                 break;
             default:
                 console.log("None FOund : " + skierDirection);

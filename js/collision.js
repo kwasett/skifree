@@ -42,6 +42,9 @@ var collisions= function(gameSetting,assets,scorecalc,obstacleItem){
             };
 
 
+            console.log("skierRect : "+JSON.stringify(skierRect));
+            console.log("obstacleRect : "+JSON.stringify(obstacleRect));
+
             return intersectRect(skierRect, obstacleRect);
         });
 

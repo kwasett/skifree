@@ -14,7 +14,7 @@ var defaultSettings = {
     oldDirection : 1,
 
 
-    rhinoSpeed : 8,
+    rhinoSpeed : 5,
     rhinoMapX : 0,
     rhinoMapY : 0,
     rhinoRadius :0,
@@ -46,11 +46,11 @@ var defaultSettings = {
 
 };
 
-var gameSetting = defaultSettings;
+
 var gameControl = function () {
     startGame = function () {
         console.log("startGame Wow")
-        gameSetting = defaultSettings;
+       
         skifree()
 
         console.log("startGame End")
@@ -88,11 +88,12 @@ var gameHtml = function () {
         return {canvas, details}
 }
 var skifree = function () {
- gameSetting.gameWidth = window.innerWidth * 0.8; //80% of the screen
- gameSetting.gameHeight = window.innerHeight;
- var html = gameHtml();
+    gameSetting = defaultSettings;
+    gameSetting.gameWidth = window.innerWidth * 0.8; //80% of the screen
+    gameSetting.gameHeight = window.innerHeight;
+    var html = gameHtml();
 
- console.log(JSON.stringify(gameSetting));
+ 
 
     
     var canvas = html.canvas;
@@ -105,7 +106,6 @@ var skifree = function () {
     var level = levels(gameSetting);
     var obstacle = obstacles(ctx, gameSetting,asset);
     var scores = higestScores(localStorage);
-  
     var rhinoCtl = rhinoActions(gameSetting);
     var scoreCalculation = scoreCal(gameSetting, rhinoCtl, level)
     var collision = collisions(gameSetting, asset, scoreCalculation,obstacle);

@@ -5,26 +5,29 @@
   <title>QUnit Example</title>  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.4/lodash.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <!-- <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.7.1.css"> -->
+  <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.7.1.css">
 </head>
 <body>
   <div id="qunit"></div>
   <div id="qunit-fixture"></div>
 
-  <!-- <script src="https://code.jquery.com/qunit/qunit-2.7.1.js"></script> -->
+  <script src="https://code.jquery.com/qunit/qunit-2.7.1.js"></script>
+  <script src="js/settings.js"></script>
   <script src="js/assets.js"></script>
   <script src="js/scores.js"></script>
+
+  <script type="text/javascript" src="js/levels.js"></script>
+
+  <script type="text/javascript" src="js/rhino.js"></script>
+  <script type="text/javascript" src="js/scorecalulation.js"></script>
+  <script src="js/testgame.js"></script>
   <script >
-   var assets = assets(123);
-   assets.loadAssets().then(function () {
-  
-    });
+//       var settings = defaultSettings;
+//    var assets = assets(settings,0,()=>{});
+   
+//    assetName =assets.getSkierAsset(1);
 
-    var scores  = higestScores(localStorage);
-  scores.saveScore("kofi", 123);
 
-var sch = scores.topRank();
-console.log("Higest Scores"+JSON.stringify(sch));
  
   </script>
 </body>

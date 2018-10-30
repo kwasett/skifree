@@ -14,6 +14,7 @@ What was done
 * Increase and decrease of game speed
 * Implementation of Levels
 * Rhino showing after skieing for a long
+* Test added for basic task https://skifree.herokuapp.com/test.html
 
 
 Keys that can be use 
