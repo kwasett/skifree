@@ -30,9 +30,10 @@ var collisions= function(gameSetting,assets,scorecalc,obstacleItem){
         };
 
 
-
+        if(gameSetting.gamePaused)
+        console.log("obstacles collision gamesettings countINGING : "+gameSetting.obstacles.length);
        
-        var collision = _.find(obstacleItem.obstacles, function (obstacle) {
+        var collision = _.find(gameSetting.obstacles, function (obstacle) {
             var obstacleImage = assets.loadedAssets[obstacle.type];
             var obstacleRect = {
                 left: obstacle.x,
@@ -41,10 +42,10 @@ var collisions= function(gameSetting,assets,scorecalc,obstacleItem){
                 bottom: obstacle.y + obstacleImage.height
             };
 
-
+            if(gameSetting.gamePaused){
             console.log("skierRect : "+JSON.stringify(skierRect));
             console.log("obstacleRect : "+JSON.stringify(obstacleRect));
-
+            }
             return intersectRect(skierRect, obstacleRect);
         });
 

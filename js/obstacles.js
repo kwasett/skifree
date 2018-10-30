@@ -13,7 +13,9 @@ var obstacles = function(ctx,gameSetting,asset){
         obstacles = [];
     }
 
-    var drawObstacles = function () {
+    var draw = function () {
+        
+       
         var newObstacles = [];
 
         _.each(obstacles, function (obstacle) {
@@ -29,8 +31,9 @@ var obstacles = function(ctx,gameSetting,asset){
 
             newObstacles.push(obstacle);
         });
-
         obstacles = newObstacles;
+        gameSetting.obstacles =obstacles;
+       
     };
 
     var placeInitialObstacles = function () {
@@ -116,5 +119,5 @@ var obstacles = function(ctx,gameSetting,asset){
         }
     };
 
-    return {reset,drawObstacles, placeInitialObstacles, placeNewObstacle, placeRandomObstacle, calculateOpenPosition, obstacles};
+    return {reset,draw, placeInitialObstacles, placeNewObstacle, placeRandomObstacle, calculateOpenPosition, obstacles};
 }

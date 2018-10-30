@@ -91,7 +91,7 @@ $(document).ready(function () {
     var skierLevel = 1;
     var scorePerLevel = 4000;
     var skierScore = 0;
-    var scoreForChase = 1000;
+    var scoreForChase = 8000;
     var showRhino = true;
     var oldDirection = 1;
 
@@ -262,6 +262,8 @@ $(document).ready(function () {
         }
     }
 
+
+    //<! scores>
     var showTopScores = function () {
         var topScores = highestScores();
         $("#topscores ol").html("");
@@ -296,6 +298,7 @@ $(document).ready(function () {
         rhinoAttack = rhino.attack;
     }
 
+    //<end scores>
 
     var changeLevel = function (scores, speed) {
         var changes = checkLevelChange(scores, speed, skierLevel);
@@ -488,6 +491,8 @@ $(document).ready(function () {
         ctx.drawImage(skierImage, x, y, skierImage.width, skierImage.height);
 
     };
+    
+
 
     var drawObstacles = function () {
         var newObstacles = [];

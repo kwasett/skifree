@@ -39,7 +39,7 @@ var skifree = function () {
         skier.draw();
         rhino.draw();
 
-        obstacle.drawObstacles();
+        obstacle.draw();
     
         ctx.restore();
 
