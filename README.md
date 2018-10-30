@@ -22,9 +22,8 @@ Keys that can be use
 * F key to move the skier faster increases the speed by 1.
 * D key to move the skier slower decreases the speed by 1
 * J key to jump
-* R key to Reset/Restart the game
+* R key to Reset/Restart the game 
 * Space bar for pause or resume game
-
 
 Scores:
 * Scores are calculated per move is calculated by Speed of Skier * Level * 10 for a successful move
@@ -34,6 +33,8 @@ Scores:
 Known Bugs
 * The Rhino its almost inevitable to get pass him as it follows using the skier location
 
+Things Left
+* Refresh done by reloading the page //fix
 * Test not totally exhaustive
 
 ----------------

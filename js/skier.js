@@ -8,8 +8,8 @@ var skierItem = function (gameSetting, ctx, asset, jump, obstacle,scoreCal) {
         };
     }
 
-    var draw = function (skierDirection, skierJumpingCount, skierJumping) {
-        var skierAssetName = asset.getSkierAsset(skierDirection);
+    var draw = function () {
+        var skierAssetName = asset.getSkierAsset(gameSetting.skierDirection);
         var skierImage = asset.loadedAssets[skierAssetName];
         var x = (gameSetting.gameWidth - skierImage.width) / 2;
         var y = (gameSetting.gameHeight - skierImage.height) / 2;
@@ -21,8 +21,6 @@ var skierItem = function (gameSetting, ctx, asset, jump, obstacle,scoreCal) {
             gameSetting.skX = x;
             gameSetting.skY = y;
         }
-
-
         ctx.drawImage(skierImage, x, y, skierImage.width, skierImage.height);
 
     };

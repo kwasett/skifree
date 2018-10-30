@@ -44,39 +44,44 @@ var rhinoItem = function(gameSetting,canvas,ctx, assets,collision){
         if (!gameSetting.showRhino || gameSetting.gamePaused || !gameSetting.rhinoAttack)
             return;
 
-            console.log("RHino drc"+gameSetting.rhinoDirection);
+            
         if (gameSetting.rhinoSkierCollide > 0) {
             eatValue = rhinoEating(gameSetting.rhinoSkierCollide);
             gameSetting.rhinoDirection = 6 + eatValue;
             if (eatValue > 4) {
-               //  endGame();
                gameSetting.gameEnded=true;
             }
         }
         else if (gameSetting.rhinoDirection !== 0) {
-
             var collided = collision.rhinoSkierCollide();
             if (collided) {
                 gameSetting.rhinoDirection = 5;
             } else {
                 gameSetting.rhinoDirection = skierDirection;
             }
-
         }
 
         switch (gameSetting.rhinoDirection) {
             case 0:
-                if (gameSetting.rMove <= 1) {
-                    gameSetting.rhinoMapY = gameSetting.skY;
-                    gameSetting.rhinoMapX = gameSetting.skX + Math.floor(gameSetting.gameWidth / 4);
-                } else {
-                    if (gameSetting.rhinoMapX < gameSetting.skX) {
-                        gameSetting.rhinoMapX -= gameSetting.skX;
-                        gameSetting.rhinoSkierCollide = 1;
+            if (gameSetting.rMove <= 1) {
+                gameSetting.rhinoRadius = (gameSetting.gameWidth/4)+(gameSetting.defaultSpeed*5);
+                rhinoCenterCoordinates = {y:gameSetting.skY-gameSetting.rhinoRadius, x:gameSetting.skX}
+                gameSetting.rhinoMapX= rhinoCenterCoordinates.x+gameSetting.rhinoRadius;
+                var posRhino = rhinoPosition(gameSetting.rhinoMapX,gameSetting.rhinoCenterCoordinates,gameSetting.rhinoRadius,
+                    gameSetting.skierSpeed)
+                gameSetting.rhinoMapY = posRhino.y;
+            } else {
+                if (gameSetting.rhinoMapX < gameSetting.skX) {
+                    gameSetting.rhinoMapX -= gameSetting.skX;
+                    gameSetting.rhinoSkierCollide = 1;
 
-                        gameSetting.skierCanMove = false;
-                    }
+                    gameSetting.skierCanMove = false;
+                }else{
+                    var posRhino = rhinoPosition(gameSetting.rhinoMapX,gameSetting.rhinoCenterCoordinates,gameSetting.rhinoRadius,gameSetting.skierSpeed)
+                    gameSetting.rhinoMapY = posRhino.y;
+                    gameSetting.rhinoMapX = posRhino.x;
                 }
+            }
             case 1:
                 gameSetting.rhinoMapX -= gameSetting.rhinoSpeed;
                 break;
@@ -107,6 +112,12 @@ var rhinoItem = function(gameSetting,canvas,ctx, assets,collision){
 
     }
 
+    var rhinoPosition =function(x,centerxy,radius, speed){
+        x-=speed;
+        y = Math.sqrt(Math.pow(radius,2) - Math.pow(x-centerxy.x,2)) +centerxy.y
+        console.log("RHino Pos : {"+x+","+y+"}");
+        return {x,y};
+    }
     var rhinoEating = function (eatingCount) {
         eat = 1;
         if (eatingCount <= 10) {

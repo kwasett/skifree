@@ -1,7 +1,7 @@
-var scoreCal = function(gameControls, rhinoCtrl,levelMgt){
-    
+var scoreCal = function (gameControls, rhinoCtrl, levelMgt) {
+
     var actionScores = {
-        'move': 10,
+        'move': 1,
         'collide': -50,
         'rhinoEat': -100
     };
@@ -13,24 +13,27 @@ var scoreCal = function(gameControls, rhinoCtrl,levelMgt){
 
 
     var addMoveScore = function (item) {
-        addScore(actionScores[item]);
+        if (item == "move")
+            calculateScore(actionScores[item]);
+        else
+            addScore(actionScores[item]);
     }
     var addScore = function (itemScore) {
         if (!gameControls.gamePaused) {
             itemScore = isNaN(itemScore) ? 0 : itemScore;
             gameControls.skierScore += (itemScore + 0);
-            addScoreListeners(itemScore,gameControls.skierScore, gameControls.skierSpeed, gameControls.skierLevel);
+            addScoreListeners(itemScore, gameControls.skierScore, gameControls.skierSpeed, gameControls.skierLevel);
         }
     }
 
-    var addScoreListeners = function (scoreJustAdded,skierScore, skierSpeed, skierLevel) {
+    var addScoreListeners = function (scoreJustAdded, skierScore, skierSpeed, skierLevel) {
         levelMgt.changeLevel(skierScore, skierSpeed, skierLevel)
-        var rhin = rhinoCtrl.rhinoChase(skierScore,gameControls.scoreForChase);
+        var rhin = rhinoCtrl.rhinoChase(skierScore, gameControls.scoreForChase);
         rhinoSpeed = rhin.speed;
         rhinoAttack = rhin.attack;
     }
 
-    return {calculateScore, addScore, addScoreListeners,addMoveScore}
+    return { calculateScore, addScore, addScoreListeners, addMoveScore }
 
 
 }
