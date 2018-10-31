@@ -1,3 +1,4 @@
+//Not refactored code but works fine
 $(document).ready(function () {
 
     var assets = {
