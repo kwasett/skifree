@@ -24,13 +24,20 @@ this start counting 1 to 100 the skier image changes at very 20 count
 * Rhino showing after skieing for a long  
 Rhino starts to change after skier scores if greater or equal to scoreForChase.
 Once this condition is met the rhino counter starts counting,. rhinoAttack is set to true, rhinoDirection is set to that of the skier . set rhinoSpeed to that of skierSpeed.
+
+```javascript
+    gameSetting.rhinoSpeed = gameSetting.skierSpeed;
+    gameSetting.rhinoAttack = true;
+    gameSetting.rhinoDirection = gameSetting.skierDirection;
+```
+
 the position of the rhino is determined by
 ```javascript
- radius = (gameSetting.gameWidth/4)+(gameSetting.defaultSpeed*5);
- gameSetting.rhinoRadius = radius
- centerxy = {y:gameSetting.skY-gameSetting.rhinoRadius, x:gameSetting.skX}
- x-=rhinoSpeed;
- y = Math.sqrt(Math.pow(radius,2) - Math.pow(x-centerxy.x,2)) +centerxy.y
+    radius = (gameSetting.gameWidth/4)+(gameSetting.defaultSpeed*5);
+    gameSetting.rhinoRadius = radius
+    centerxy = {y:gameSetting.skY-gameSetting.rhinoRadius, x:gameSetting.skX}
+    x-=rhinoSpeed;
+    y = Math.sqrt(Math.pow(radius,2) - Math.pow(x-centerxy.x,2)) +centerxy.y
 
  ```
 
