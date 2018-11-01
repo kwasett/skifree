@@ -10,7 +10,7 @@ var defaultSettings = {
     skierLevel : 1,
     scorePerLevel : 4000, //level amount
     skierScore : 0,
-    scoreForChase : 1000, //score before a chase beins
+    scoreForChase : 8000, //score before a chase beins
     showRhino : true,
     oldDirection : 1,
 
