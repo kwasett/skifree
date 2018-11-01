@@ -4,7 +4,7 @@ $(document).ready(function () {
     var settings = defaultSettings;
 
     var asset = assets(settings, 0, () => { });
-    var assetName = asset.getSkierAsset(1);
+    var assetFileName = asset.getSkierAsset(1);
     var level = levels(settings);
 
     var rhinoCtl = rhinoActions(settings);
@@ -14,7 +14,7 @@ $(document).ready(function () {
 
     
     QUnit.test("Find Asserts", function (assert) {
-        assert.ok(assetName == "skierLeft", "Passed!");
+        assert.ok(assetFileName == "skierLeft", "Passed!");
     });
 
     QUnit.test("Score Calculator Per move", function (assert) {
