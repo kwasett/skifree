@@ -21,7 +21,7 @@ this start counting 1 to 100 the skier image changes at very 20 count
 * Pause and Resume of game
 * Increase and decrease of game speed
 * Implementation of Levels
-* Rhino showing after skieing for a long
+* Rhino showing after skieing for a long  
 Rhino starts to change after skier scores if greater or equal to scoreForChase.
 Once this condition is met the rhino counter starts counting,. rhinoAttack is set to true, rhinoDirection is set to that of the skier . set rhinoSpeed to that of skierSpeed.
 the position of the rhino is determined by
