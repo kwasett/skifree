@@ -36,7 +36,7 @@ the position of the rhino is determined by
     radius = (gameSetting.gameWidth/4)+(gameSetting.defaultSpeed*5);
     gameSetting.rhinoRadius = radius
     centerxy = {y:gameSetting.skY-gameSetting.rhinoRadius, x:gameSetting.skX}
-    x-=rhinoSpeed;
+    x-=gameSetting.rhinoSpeed;
     y = Math.sqrt(Math.pow(radius,2) - Math.pow(x-centerxy.x,2)) +centerxy.y
 
  ```

@@ -69,7 +69,7 @@ var rhinoItem = function(gameSetting,canvas,ctx, assets,collision){
             if (collided) {
                 gameSetting.rhinoDirection = 5;
             } else {
-                gameSetting.rhinoDirection = skierDirection;
+                gameSetting.rhinoDirection = gameSetting.skierDirection;
             }
         }
 
@@ -101,20 +101,15 @@ var rhinoItem = function(gameSetting,canvas,ctx, assets,collision){
                     gameSetting.rhinoMapX = posRhino.x;
                 }
             }
-            case 1:
-                gameSetting.rhinoMapX -= gameSetting.rhinoSpeed;
-                break;
+            case 1: 
             case 2:
-                gameSetting.rhinoMapX -= Math.round(gameSetting.rhinoSpeed / 1.4142);
-                gameSetting.rhinoMapY += Math.round(gameSetting.rhinoSpeed / 1.4142);
-                break;
             case 3:
-                gameSetting.rhinoMapY += gameSetting.rhinoSpeed;
-                break;
             case 4:
-                gameSetting.rhinoMapX += gameSetting.rhinoSpeed / 1.4142;
-                gameSetting.rhinoMapY += gameSetting.rhinoSpeed / 1.4142;
-                break;
+              
+                var posRhino = rhinoPosition(gameSetting.rhinoMapX,gameSetting.rhinoCenterCoordinates,gameSetting.rhinoRadius,gameSetting.skierSpeed)
+                    gameSetting.rhinoMapY = posRhino.y;
+                    gameSetting.rhinoMapX = posRhino.x;
+                break
             case 5:
 
             case 6:

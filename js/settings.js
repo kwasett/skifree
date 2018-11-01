@@ -8,9 +8,9 @@ var defaultSettings = {
     defaultSpeed : 5,
     skierSpeed : 5,
     skierLevel : 1,
-    scorePerLevel : 4000,
+    scorePerLevel : 4000, //level amount
     skierScore : 0,
-    scoreForChase : 8000,
+    scoreForChase : 1000, //score before a chase beins
     showRhino : true,
     oldDirection : 1,
 
@@ -75,12 +75,12 @@ var gameHtml = function () {
             width: (0.18 * window.innerWidth) + 'px',
             height: gameSetting.gameHeight,
             float: 'right'
-        }).append($("<div>Scores : <span></span></div>").attr("id", "scores"))
+        }).append($("<div><br />Scores : <span></span></div>").attr("id", "scores"))
         .append($("<div>Speed : <span></span></div>").attr("id", "speed"))
         .append($("<div>Level : <span></span></div>").attr("id", "level"))
         .append($("<div>No of Lives : <span></span></div>").attr("id", "collisions"))
         .append($("<div>Status : <span></span></div>").attr("id", "status"))
-        .append($("<div><em>* Down Arrow key to move down or start the game<br />* F key to move the skier faster increases the speed by 1.<br />* D key to move the skier slower decreases the speed by 1<br />* J key to jump<br />* R key to Reset/Restart the game <br />* Space bar for pause or resume game</em></div>").attr("id", "status"))
+        .append($("<div><em><p>* <b>Down Arrow</b> key to move down or start the game<br />* <b>F </b>key to move the skier faster increases the speed by 1.<br />* <b>D</b> key to move the skier slower decreases the speed by 1<br />*<b> J </b>key to jump<br />*<b> R </b>key to Reset/Restart the game <br />* <b>Space bar</b> for pause or resume game</em></p></div>").attr("id", "status"))
         
         
         .append($("<div><br /><br /><h3>Top Scores</h3><ol></ol></div>").attr("id", "topscores"));
