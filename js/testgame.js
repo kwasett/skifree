@@ -4,7 +4,7 @@ $(document).ready(function () {
     var settings = defaultSettings;
 
     var asset = assets(settings, 0, () => { });
-    assetName = asset.getSkierAsset(1);
+    var assetName = asset.getSkierAsset(1);
     var level = levels(settings);
 
     var rhinoCtl = rhinoActions(settings);
