@@ -1,3 +1,4 @@
+//Asset functions
 var assets = function(gameSetting,skierJumpingCount,jump){
 
     var assets = {
@@ -35,12 +36,14 @@ var assets = function(gameSetting,skierJumpingCount,jump){
 
     var loadedAssets = {};
 
+    //image giving the direction
     var getSkierImage = function (skierDirection) {
         var skierAssetName = getSkierAsset(skierDirection);
         console.log("Skier loaded : "+ JSON.stringify(skierAssetName))
         return loadedAssets[skierAssetName];
     }
 
+    //get the skier asset name given the direction
     var getSkierAsset = function (skierDirection) {
         var skierAssetName;
         switch (skierDirection) {
@@ -73,6 +76,7 @@ var assets = function(gameSetting,skierJumpingCount,jump){
         return skierAssetName;
     };
 
+    //get rhino asset name given the direction
     var getRhinoAsset = function (rhinoDirection) {
         var skierAssetName;
 
@@ -109,6 +113,8 @@ var assets = function(gameSetting,skierJumpingCount,jump){
         return skierAssetName;
     };
 
+
+    //done at startup loads all assets
     var loadAssets = function () {
         var assetPromises = [];
 

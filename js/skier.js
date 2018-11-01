@@ -1,4 +1,6 @@
+//skier function
 var skierItem = function (gameSetting, ctx, asset, jump, obstacle,scoreCal) {
+    //get the rectangle area occupied by the skier
     var getRect = function (skierImage) {
         return {
             left: gameSetting.skierMapX + gameSetting.gameWidth / 2,
@@ -8,6 +10,8 @@ var skierItem = function (gameSetting, ctx, asset, jump, obstacle,scoreCal) {
         };
     }
 
+
+    //draws a skier per the direction
     var draw = function () {
         var skierAssetName = asset.getSkierAsset(gameSetting.skierDirection);
         var skierImage = asset.loadedAssets[skierAssetName];
@@ -26,7 +30,9 @@ var skierItem = function (gameSetting, ctx, asset, jump, obstacle,scoreCal) {
     };
 
 
+    //moves the skier
     var move = function () {
+        //check if the skiercan move and game is not paused
         if (gameSetting.gamePaused || !gameSetting.skierCanMove)
             return;
         var oldx = gameSetting.skierMapX, oldy = gameSetting.skierMapY;
@@ -67,6 +73,7 @@ var skierItem = function (gameSetting, ctx, asset, jump, obstacle,scoreCal) {
 
     };
 
+    //checks if the skier has moved or at the same position to help in calculating scores
     var skierMoved = function (oldX, oldY) {
 
         scoreItem = "";

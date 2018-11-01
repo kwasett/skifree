@@ -1,4 +1,8 @@
+//functions to enable the skier jump
 var jumper = function (gameSetting) {
+
+    //starts the whole jump process
+    //set skierJumpingCount to 1 and skierJumping to true
     var start = function () {
         gameSetting.skierJumpingCount = 1;
         gameSetting.skierJumping = true;
@@ -6,6 +10,9 @@ var jumper = function (gameSetting) {
         gameSetting.skierDirection = 6;
     }
 
+    //stops the jump process
+    //set skierJumpingCount to 0 and skierJumping to false
+    //reset old direction
     var stop = function () {
         gameSetting.skierJumpingCount = 0;
         gameSetting.skierJumping = false;
@@ -13,6 +20,8 @@ var jumper = function (gameSetting) {
 
     }
 
+
+    //gets the cordinate of a jump given the jump count the width of the jump image and the x coordinate
     var coordinate = function (jumpCount, width, x, y) {
 
         var jumpCountToShow = jumpToShow(jumpCount);
@@ -29,9 +38,11 @@ var jumper = function (gameSetting) {
 
     }
 
+    //determines the jump image index to show its generally mod 20 of the jump count
     var jumpToShow = function (jumpCount) {
         var jump = Math.floor(jumpCount / 20) + 1;
 
+        //if jump count is more than 100 stop jumping
         if (jumpCount >= 100) {
             jump = 5;
             stop();

@@ -1,3 +1,4 @@
+//list of all global gamesettings
 var defaultSettings = {
     skierDirection : 5,
     skierMapX : 0,

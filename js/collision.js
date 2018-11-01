@@ -1,5 +1,7 @@
 
+//collisions
 var collisions= function(gameSetting,assets,scorecalc,obstacleItem){
+    //checkis if a rhino ans skier collided
     var rhinoSkierCollide = function () {
         if (gameSetting.rhinoSkierCollide > 0)
             return rhinoSkierCollide;
@@ -16,12 +18,14 @@ var collisions= function(gameSetting,assets,scorecalc,obstacleItem){
         return collision;
     }
 
+
+    //ckecks if the skier collides with an obstacle
     var skierHitObstacle = function () {
         var skierAssetName = assets.getSkierAsset(gameSetting.skierDirection);
 
         var skierImage = assets.loadedAssets[skierAssetName];
 
-
+        //the rrectangle areas occupied by the skier
         var skierRect = {
             left: gameSetting.skierMapX + gameSetting.gameWidth / 2,
             right: gameSetting.skierMapX + skierImage.width + gameSetting.gameWidth / 2,
@@ -29,12 +33,9 @@ var collisions= function(gameSetting,assets,scorecalc,obstacleItem){
             bottom: gameSetting.skierMapY + skierImage.height + gameSetting.gameHeight / 2
         };
 
-
-        if(gameSetting.gamePaused)
-        console.log("obstacles collision gamesettings countINGING : "+gameSetting.obstacles.length);
-       
         var collision = _.find(gameSetting.obstacles, function (obstacle) {
             var obstacleImage = assets.loadedAssets[obstacle.type];
+            //rectangle area occupied by the obstale
             var obstacleRect = {
                 left: obstacle.x,
                 right: obstacle.x + obstacleImage.width,
@@ -42,27 +43,32 @@ var collisions= function(gameSetting,assets,scorecalc,obstacleItem){
                 bottom: obstacle.y + obstacleImage.height
             };
 
-            if(gameSetting.gamePaused){
-            console.log("skierRect : "+JSON.stringify(skierRect));
-            console.log("obstacleRect : "+JSON.stringify(obstacleRect));
-            }
+            //check  if the 2 rectangles intersect
             return intersectRect(skierRect, obstacleRect);
         });
 
+        //if collison is found it would not be null
         if (collision) {
+            //If collison check the direction and 
+            //Reduce the number of lives
+            //deduct collision from the scores
             if (gameSetting.skierDirection !== 0) {
                 gameSetting.livesCount--;
                 scorecalc.addMoveScore("collide");
+
+                //If lives is less than 0 end game
                 if (gameSetting.livesCount <= 0) {
-                    console.log("Reached Max Collission")
-                    //gameSetting.endGame()
                     gameSetting.gameEnded = true;
                 }
             }
+
+
+            //Default directio
             gameSetting.skierDirection = 0;
         }
     };
 
+    //Function checks if the any 2 items intersects
     var intersectRect = function (r1, r2) {
         return !(r2.left > r1.right ||
             r2.right < r1.left ||
@@ -71,6 +77,7 @@ var collisions= function(gameSetting,assets,scorecalc,obstacleItem){
     };
 
 
+    //Returns the skier reactangle given a skier image
     var getSkierRect = function (skierImage) {
         return {
             left: gameSetting.rskierMapX + gameSetting.gameWidth / 2,
@@ -80,6 +87,7 @@ var collisions= function(gameSetting,assets,scorecalc,obstacleItem){
         };
     }
 
+        //Returns the rhino reactangle given a rhino image
     var getRhinoRect = function (rhinoImage) {
         rhino = {
             left: rhinoImage.x,

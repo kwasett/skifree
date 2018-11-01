@@ -1,4 +1,6 @@
+//main skifree endpoint
 var skifree = function () {
+    //set game settings
     gameSetting = defaultSettings;
     gameSetting.gameWidth = window.innerWidth * 0.8; //80% of the screen
     gameSetting.gameHeight = window.innerHeight;
@@ -9,17 +11,18 @@ var skifree = function () {
     $('body').html("").append(details).append(canvas);
 
     var ctx = canvas[0].getContext('2d');
-    var jump = jumper(gameSetting);
-    var asset = assets(gameSetting,gameSetting.skierJumpingCount,jump);
-    var level = levels(gameSetting);
-    var obstacle = obstacles(ctx, gameSetting,asset);
-    var scores = higestScores(localStorage);
-    var rhinoCtl = rhinoActions(gameSetting);
-    var scoreCalculation = scoreCal(gameSetting, rhinoCtl, level)
-    var collision = collisions(gameSetting, asset, scoreCalculation,obstacle);
-    var rhino = rhinoItem(gameSetting, canvas, ctx, asset, collision);
-    var skier = skierItem(gameSetting, ctx, asset, jump, obstacle,scoreCalculation);
+    var jump = jumper(gameSetting); //initialise jump
+    var asset = assets(gameSetting,gameSetting.skierJumpingCount,jump); //initialise asset
+    var level = levels(gameSetting); //initialise level
+    var obstacle = obstacles(ctx, gameSetting,asset); //initialise obstacles
+    var scores = higestScores(localStorage); //initialise higest scores
+    var rhinoCtl = rhinoActions(gameSetting); //intialise rhino actions
+    var scoreCalculation = scoreCal(gameSetting, rhinoCtl, level) //initialisation for scores calculator
+    var collision = collisions(gameSetting, asset, scoreCalculation,obstacle); //collision initialisation
+    var rhino = rhinoItem(gameSetting, canvas, ctx, asset, collision); //rhino initialisation
+    var skier = skierItem(gameSetting, ctx, asset, jump, obstacle,scoreCalculation);//skier initialisation
 
+    //the game loop flow
     var gameLoop = function () {
 
         ctx.save();
@@ -48,8 +51,9 @@ var skifree = function () {
     };
 
 
+    //handles all key events per the key pressed
     var keyEventsHandler = function (keypressed) {
-        console.log("Keypressed : " + keypressed);
+       
         switch (keypressed) {
             case 37: // left
                 if (gameSetting.skierDirection === 1) {
@@ -86,7 +90,10 @@ var skifree = function () {
                 gameSetting.skierSpeed += 1;
                 break;
             case 68: //d for slower
+                
                 gameSetting.skierSpeed -= 1;
+                if(gameSetting.skierSpeed<=gameSetting.defaultSpeed)
+                gameSetting.skierSpeed  = gameSetting.defaultSpeed;
                 break;
             case 82: //R for reset of the game
                 restart();
@@ -109,10 +116,13 @@ var skifree = function () {
         });
     };
 
+
+    //pause or resume the game
     var pauseResume = function () {
         gameSetting.gamePaused = !gameSetting.gamePaused;
     }
 
+    //check if the game has ended
     var checkStatus =function(){
         if(gameSetting.gameEnded){
             var cname = prompt("Game Ended your score was " + gameSetting.skierScore + "\n\nKindly enter your name.");
@@ -125,10 +135,12 @@ var skifree = function () {
         }
     }
 
+    //clears the canvas
     var clearCanvas = function () {
         ctx.clearRect(0, 0, gameSetting.gameWidth, gameSetting.gameHeight);
     };
 
+    //display html for the scores level lives left status
     var displayDetails = function () {
         $("#scores span").html(gameSetting.skierScore);
         $("#speed span").html(gameSetting.skierSpeed);
@@ -137,6 +149,7 @@ var skifree = function () {
         $("#status span").html(gameSetting.gamePaused ? "Paused" : "Playing");
     }
 
+    //init for the game main start endpoint
     var initGame = function () {
         setupKeyhandler();
         asset.loadAssets().then(function () {
@@ -146,6 +159,7 @@ var skifree = function () {
     };
 
 
+    //restart the game
     var restart = function () {
         console.log("reseting");
         window.location.reload();

@@ -1,3 +1,4 @@
+//obstacle function
 var obstacles = function(ctx,gameSetting,asset){
 
     var obstacleTypes = [
@@ -13,6 +14,7 @@ var obstacles = function(ctx,gameSetting,asset){
         obstacles = [];
     }
 
+    //draws new obstacles
     var draw = function () {
         
        
@@ -36,6 +38,7 @@ var obstacles = function(ctx,gameSetting,asset){
        
     };
 
+    //for placing initial obstacles
     var placeInitialObstacles = function () {
         var numberObstacles = Math.ceil(_.random(5, 7) * (gameSetting.gameWidth / 800) * (gameSetting.gameHeight / 500));
 
@@ -54,6 +57,8 @@ var obstacles = function(ctx,gameSetting,asset){
         });
     };
 
+
+    //plce ne obstacles
     var placeNewObstacle = function (direction) {
         var shouldPlaceObstacle = _.random(1, 8);
         if (shouldPlaceObstacle !== 8) {
@@ -88,6 +93,7 @@ var obstacles = function(ctx,gameSetting,asset){
         }
     };
 
+    //randomise obstacles
     var placeRandomObstacle = function (minX, maxX, minY, maxY) {
         var obstacleIndex = _.random(0, obstacleTypes.length - 1);
 
@@ -100,6 +106,7 @@ var obstacles = function(ctx,gameSetting,asset){
         })
     };
 
+    //calculate the open spaces
     var calculateOpenPosition = function (minX, maxX, minY, maxY) {
         var x = _.random(minX, maxX);
         var y = _.random(minY, maxY);

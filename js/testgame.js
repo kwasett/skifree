@@ -14,6 +14,7 @@ $(document).ready(function () {
 
 
 
+    
     QUnit.test("Find Asserts", function (assert) {
         assert.ok(assetName == "skierLeft", "Passed!");
     });
