@@ -181,9 +181,9 @@ var rhinoItem = function(gameSetting,canvas,ctx, assets,collision){
 
     //get the rhino position
     var rhinoPosition =function(x,centerxy,radius, speed){
-        x-=speed;
+        x-=1;
         y = Math.sqrt(Math.pow(radius,2) - Math.pow(x-centerxy.x,2)) +centerxy.y
-        console.log("RHino Pos : {"+x+","+y+"}");
+        
         return {x,y};
     }
 

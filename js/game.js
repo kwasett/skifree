@@ -1,4 +1,5 @@
 //Not refactored code but works fine
+///notrefactored.html uses this
 $(document).ready(function () {
 
     var assets = {
