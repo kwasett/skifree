@@ -7,8 +7,8 @@ The Game can be accessed via https://skifree.herokuapp.com/ . To play the game j
 
 What was done
 * Fix left bug after a crush
-* Implemented Jump
-For the skier to jump press the J key 
+* Implemented Jump  
+For the skier to jump press the J key  
 this start counting 1 to 100 the skier image changes at very 20 count  
 1-20 it stays at the same position changes image to skier_jump_1  
 21-40 moves up changes image to skier_jump2  
