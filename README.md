@@ -48,7 +48,7 @@ the position of the rhino is determined by
 Keys that can be use 
 * Down Arrow key to move down or start the game
 * F key to move the skier faster increases the speed by 1.
-* D key to move the skier slower decreases the speed by 1
+* D key to move the skier slower, decreases the speed by 1 the minimum speed should be equal to the defaultSpeed which is 5 it can't go below that
 * J key to jump
 * R key to Reset/Restart the game 
 * Space bar for pause or resume game
