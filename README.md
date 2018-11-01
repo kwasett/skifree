@@ -9,13 +9,13 @@ What was done
 * Fix left bug after a crush
 * Implemented Jump
 For the skier to jump press the J key 
-this start counting 1 to 100 the skier image changes at very 20 count
-1-20 it stays at the same position changes image to skier_jump_1
-21-40 moves up changes image to skier_jump2
-41-60 moves up again changes image to skier_jump3
-61-80 starts decending to the same level as 21-40 but with image skier_jump_4
-81-100 return to same position as 1-20 but with image skier_jump_5
->100 resume status of the game
+this start counting 1 to 100 the skier image changes at very 20 count  
+1-20 it stays at the same position changes image to skier_jump_1  
+21-40 moves up changes image to skier_jump2  
+41-60 moves up again changes image to skier_jump3  
+61-80 starts decending to the same level as 21-40 but with image skier_jump_4  
+81-100 return to same position as 1-20 but with image skier_jump_5  
+101> resume status of the game  
 * Implemented Scores
 * Top Scorers Chart
 * Pause and Resume of game
