@@ -1,7 +1,14 @@
-//rhino control action
+/**
+ * rhino control action
+ * @param {*} gameSetting 
+ */
 var rhinoActions = function(gameSetting){
 
-    //function determines whether its time to have a rhino chase
+    /**
+     * determines whether its time to have a rhino chase
+     * @param {*} skierScore 
+     * @param {*} scoreForChase 
+     */
     var rhinoChase = function (skierScore,scoreForChase) {
 
         gameSetting.rhinoSpeed = gameSetting.skierSpeed;
@@ -14,7 +21,11 @@ var rhinoActions = function(gameSetting){
         return {attack: gameSetting.rhinoAttack, speed : gameSetting.rhinoSpeed};
     }
 
-    //the process of eating keeping track of the count
+    
+    /**
+     * the process of eating keeping track of the count
+     * @param {*} eatingCount 
+     */
     var rhinoEating = function (eatingCount) {
         eat = 1;
         if (eatingCount <= 10) {
@@ -43,9 +54,18 @@ var rhinoActions = function(gameSetting){
     return {rhinoChase, rhinoEating}
 }
 
-//function for rhino movement and drawing
+/**
+ * function for rhino movement and drawing
+ * @param {*} gameSetting 
+ * @param {*} canvas 
+ * @param {*} ctx 
+ * @param {*} assets 
+ * @param {*} collision 
+ */
 var rhinoItem = function(gameSetting,canvas,ctx, assets,collision){
-    //moves the rhino per the desired rhinodirection
+    /**
+     * Moves the rhino per the desired rhinoDirection
+     */
     var move = function () {
 
         //check if the move should go on, the game must not be paused, rhino should he attacking , and showRhino must be true
@@ -127,12 +147,10 @@ var rhinoItem = function(gameSetting,canvas,ctx, assets,collision){
     }
 
 
-    //position of a rhino it uses a semi circle
-    var rhinoPosition =function(x,centerxy,radius, speed){
-        x-=speed;
-        y = Math.sqrt(Math.pow(radius,2) - Math.pow(x-centerxy.x,2)) +centerxy.y
-        return {x,y};
-    }
+    
+    /**
+     * rhino eating count to determine the eat image to show
+     */
     var rhinoEating = function (eatingCount) {
         eat = 1;
         if (eatingCount <= 10) {
@@ -159,7 +177,10 @@ var rhinoItem = function(gameSetting,canvas,ctx, assets,collision){
 
     
 
-    //draws a skier on the vanvas
+    
+    /**
+     * draws a skier on the canvas
+     */
     draw = function () {
         if (!gameSetting.rhinoAttack)
             return;
@@ -169,7 +190,11 @@ var rhinoItem = function(gameSetting,canvas,ctx, assets,collision){
         ctx.drawImage(skierImage, gameSetting.rhinoMapX, gameSetting.rhinoMapY, skierImage.width, skierImage.height);
     }
 
-    //the rhino rectangle
+ 
+    /**
+     * the rhino rectangle
+     * @param {*} rhinoImage 
+     */
     var getRhinoRect = function (rhinoImage) {
         rhino = {
             left: rhinoImage.x,
@@ -179,7 +204,13 @@ var rhinoItem = function(gameSetting,canvas,ctx, assets,collision){
         };
     }
 
-    //get the rhino position
+    /**
+     * get the rhino position
+     * @param {*} x 
+     * @param {*} centerxy 
+     * @param {*} radius 
+     * @param {*} speed 
+     */
     var rhinoPosition =function(x,centerxy,radius, speed){
         x-=1;
         y = Math.sqrt(Math.pow(radius,2) - Math.pow(x-centerxy.x,2)) +centerxy.y

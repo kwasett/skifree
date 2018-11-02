@@ -1,13 +1,16 @@
 //main skifree endpoint
+/**
+ * Main skifree endpint
+ */
 var skifree = function () {
     //set game settings
     gameSetting = defaultSettings;
-    gameSetting.gameWidth = window.innerWidth * 0.8; //80% of the screen
+    gameSetting.gameWidth = window.innerWidth * 0.8; //80% of the screen  /20% for  
     gameSetting.gameHeight = window.innerHeight;
     var html = gameHtml();
 
-    var canvas = html.canvas;
-    var details = html.details;
+    var canvas = html.canvas; //canvas
+    var details = html.details; //html details
     $('body').html("").append(details).append(canvas);
 
     var ctx = canvas[0].getContext('2d');
@@ -16,13 +19,17 @@ var skifree = function () {
     var level = levels(gameSetting); //initialise level
     var obstacle = obstacles(ctx, gameSetting,asset); //initialise obstacles
     var scores = higestScores(localStorage); //initialise higest scores
+    var speed = speedSetting(gameSetting); //initialise higest scores
     var rhinoCtl = rhinoActions(gameSetting); //intialise rhino actions
     var scoreCalculation = scoreCal(gameSetting, rhinoCtl, level) //initialisation for scores calculator
     var collision = collisions(gameSetting, asset, scoreCalculation,obstacle); //collision initialisation
     var rhino = rhinoItem(gameSetting, canvas, ctx, asset, collision); //rhino initialisation
     var skier = skierItem(gameSetting, ctx, asset, jump, obstacle,scoreCalculation);//skier initialisation
 
-    //the game loop flow
+ 
+    /**
+     * the game loop flow
+     */
     var gameLoop = function () {
 
         ctx.save();
@@ -51,7 +58,11 @@ var skifree = function () {
     };
 
 
-    //handles all key events per the key pressed
+
+    /**
+     * handles all key events per the key pressed
+     * @param {number} keypressed 
+     */
     var keyEventsHandler = function (keypressed) {
        
         switch (keypressed) {
@@ -87,13 +98,11 @@ var skifree = function () {
                 break;
 
             case 70: //F for faster
-                gameSetting.skierSpeed += 1;
+                speed.increaseSpeed();
                 break;
             case 68: //d for slower
                 
-                gameSetting.skierSpeed -= 1;
-                if(gameSetting.skierSpeed<=gameSetting.defaultSpeed)
-                gameSetting.skierSpeed  = gameSetting.defaultSpeed;
+            speed.decreaseSpeed();
                 break;
             case 82: //R for reset of the game
                 restart();

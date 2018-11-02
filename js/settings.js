@@ -1,4 +1,7 @@
 //list of all global gamesettings
+/**
+ * the settings 
+ */
 var defaultSettings = {
     skierDirection : 5,
     skierMapX : 0,
@@ -46,19 +49,26 @@ var defaultSettings = {
     gameEnded: false
 };
 
+/**
+ * Game COntrols
+ */
 var gameControl = function () {
+    /**
+     * Start a new game
+     */
     startGame = function () {
-        console.log("startGame Wow")
-       
         skifree()
-
-        console.log("startGame End")
     }
 
     return {startGame}
 }
 
+/**
+ * Game htmls for the levels and drawing of canvas
+ */
 var gameHtml = function () {
+
+    //Canvas html
     var canvas = $('<canvas></canvas>')
         .attr('width', gameSetting.gameWidth * window.devicePixelRatio)
         .attr('height', gameSetting.gameHeight * window.devicePixelRatio)
@@ -69,6 +79,7 @@ var gameHtml = function () {
             float: 'left'
         });
 
+    //details for scores level, lives and top scores
     var details = $('<div></div>')
         .attr("id", "details")
         .css({

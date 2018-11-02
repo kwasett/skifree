@@ -1,4 +1,10 @@
-//obstacle function
+
+/**
+ * obstacle function
+ * @param {context} ctx 
+ * @param {*} gameSetting 
+ * @param {*} asset 
+ */
 var obstacles = function(ctx,gameSetting,asset){
 
     var obstacleTypes = [
@@ -10,11 +16,18 @@ var obstacles = function(ctx,gameSetting,asset){
 
     var obstacles = [];
 
+    /**
+     * 
+     * reset the obstacles 
+     */
     var reset = function(){
-        obstacles = [];
+        gameSetting.obstacles = [];
     }
 
-    //draws new obstacles
+  
+    /**
+     * Draws new obstacles
+     */
     var draw = function () {
         
        
@@ -38,7 +51,9 @@ var obstacles = function(ctx,gameSetting,asset){
        
     };
 
-    //for placing initial obstacles
+    /**
+     * for placing initial obstacles
+     */
     var placeInitialObstacles = function () {
         var numberObstacles = Math.ceil(_.random(5, 7) * (gameSetting.gameWidth / 800) * (gameSetting.gameHeight / 500));
 
@@ -59,6 +74,10 @@ var obstacles = function(ctx,gameSetting,asset){
 
 
     //plce ne obstacles
+    /**
+     * Place new obstacle based on skier direction
+     * @param {number} direction 
+     */
     var placeNewObstacle = function (direction) {
         var shouldPlaceObstacle = _.random(1, 8);
         if (shouldPlaceObstacle !== 8) {
@@ -93,7 +112,14 @@ var obstacles = function(ctx,gameSetting,asset){
         }
     };
 
-    //randomise obstacles
+   
+    /**
+     * randomise obstacles
+     * @param {number} minX 
+     * @param {number} maxX 
+     * @param {number} minY 
+     * @param {number} maxY 
+     */
     var placeRandomObstacle = function (minX, maxX, minY, maxY) {
         var obstacleIndex = _.random(0, obstacleTypes.length - 1);
 
@@ -106,7 +132,14 @@ var obstacles = function(ctx,gameSetting,asset){
         })
     };
 
-    //calculate the open spaces
+    
+    /**
+     * calculate the open spaces
+     * @param {number} minX 
+     * @param {number} maxX 
+     * @param {number} minY 
+     * @param {number} maxY 
+     */
     var calculateOpenPosition = function (minX, maxX, minY, maxY) {
         var x = _.random(minX, maxX);
         var y = _.random(minY, maxY);

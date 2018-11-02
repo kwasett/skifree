@@ -1,7 +1,15 @@
 
-//collisions
+/**
+ * Collision function
+ * @param {*} gameSetting 
+ * @param {*} assets 
+ * @param {*} scorecalc 
+ * @param {*} obstacleItem 
+ */
 var collisions= function(gameSetting,assets,scorecalc,obstacleItem){
-    //checkis if a rhino ans skier collided
+    /**
+     * Check if skier and rhino colloded
+     */
     var rhinoSkierCollide = function () {
         if (gameSetting.rhinoSkierCollide > 0)
             return rhinoSkierCollide;
@@ -18,8 +26,9 @@ var collisions= function(gameSetting,assets,scorecalc,obstacleItem){
         return collision;
     }
 
-
-    //ckecks if the skier collides with an obstacle
+    /**
+     * ckecks if the skier collides with an obstacle
+     */
     var skierHitObstacle = function () {
         var skierAssetName = assets.getSkierAsset(gameSetting.skierDirection);
 
@@ -68,7 +77,11 @@ var collisions= function(gameSetting,assets,scorecalc,obstacleItem){
         }
     };
 
-    //Function checks if the any 2 items intersects
+    /**
+ * checks if the  2 items intersects
+     * @param {*} r1 
+     * @param {*} r2 
+     */
     var intersectRect = function (r1, r2) {
         return !(r2.left > r1.right ||
             r2.right < r1.left ||
@@ -77,7 +90,10 @@ var collisions= function(gameSetting,assets,scorecalc,obstacleItem){
     };
 
 
-    //Returns the skier reactangle given a skier image
+    /**
+     * get the rectangular  a skier occupies
+     * @param {*} skierImage 
+     */
     var getSkierRect = function (skierImage) {
         return {
             left: gameSetting.rskierMapX + gameSetting.gameWidth / 2,
@@ -88,6 +104,10 @@ var collisions= function(gameSetting,assets,scorecalc,obstacleItem){
     }
 
         //Returns the rhino reactangle given a rhino image
+        /**
+         * 
+         * @param {*} rhinoImage 
+         */
     var getRhinoRect = function (rhinoImage) {
         rhino = {
             left: rhinoImage.x,

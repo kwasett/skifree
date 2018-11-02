@@ -1,6 +1,17 @@
-//skier function
+/**
+ * skier function
+ * @param {*} gameSetting 
+ * @param {*} ctx 
+ * @param {*} asset 
+ * @param {*} jump 
+ * @param {*} obstacle 
+ * @param {*} scoreCal 
+ */
 var skierItem = function (gameSetting, ctx, asset, jump, obstacle,scoreCal) {
-    //get the rectangle area occupied by the skier
+    /**
+     * get the rectangle area occupied by the skier
+     * @param {*} skierImage 
+     */
     var getRect = function (skierImage) {
         return {
             left: gameSetting.skierMapX + gameSetting.gameWidth / 2,
@@ -11,12 +22,16 @@ var skierItem = function (gameSetting, ctx, asset, jump, obstacle,scoreCal) {
     }
 
 
-    //draws a skier per the direction
+    
+    /**
+     * draws a skier per the direction
+     */
     var draw = function () {
         var skierAssetName = asset.getSkierAsset(gameSetting.skierDirection);
         var skierImage = asset.loadedAssets[skierAssetName];
         var x = (gameSetting.gameWidth - skierImage.width) / 2;
         var y = (gameSetting.gameHeight - skierImage.height) / 2;
+        //if jumping get coordinates from jump
         if (gameSetting.skierJumping) {
             var xy = jump.coordinate(gameSetting.skierJumpingCount, skierImage.width / 2, x, y)
             gameSetting.skX = xy.x;
@@ -30,7 +45,10 @@ var skierItem = function (gameSetting, ctx, asset, jump, obstacle,scoreCal) {
     };
 
 
-    //moves the skier
+  
+    /**
+     * moves the skier
+     */
     var move = function () {
         //check if the skiercan move and game is not paused
         if (gameSetting.gamePaused || !gameSetting.skierCanMove)
@@ -73,7 +91,12 @@ var skierItem = function (gameSetting, ctx, asset, jump, obstacle,scoreCal) {
 
     };
 
-    //checks if the skier has moved or at the same position to help in calculating scores
+
+    /**
+     * checks if the skier has moved or at the same position to help in calculating scores
+     * @param {number} oldX 
+     * @param {number} oldY 
+     */
     var skierMoved = function (oldX, oldY) {
 
         scoreItem = "";
