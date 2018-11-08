@@ -6,15 +6,15 @@ var speedSetting = function (gameSetting) {
     /**
      * Increase the speed for the skier
      */
-    var increaseSpeed = function(){
-        gameSetting.skierSpeed++;
+    var increaseSpeed = function(speed=1){
+        gameSetting.skierSpeed+=speed;
     }
 
     /**
      * Decrease the speed of the skier. 
      */
-    var decreaseSpeed = function(){
-        gameSetting.skierSpeed--;
+    var decreaseSpeed = function(speed=1){
+        gameSetting.skierSpeed-=speed;
         //if reduced below the defaultspeed set to defaultspeed
         if(gameSetting.skierSpeed<gameSetting.defaultSpeed)
             gameSetting.skierSpeed= gameSetting.defaultSpeed;
