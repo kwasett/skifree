@@ -86,7 +86,7 @@ Requirements:
   * Steps to Reproduce:
     1. Load the game
     1. Crash into an obstacle
-    1. Press the left arrow key
+    1. Press the left arrow key down
   * Expected Result: The skier gets up and is facing to the left
   * Actual Result: Giant blizzard occurs causing the screen to turn completely white (or maybe the game just crashes!)
 
@@ -114,4 +114,4 @@ Bonus:
 And don't think you have to stop there. If you're having fun with this and have the time, feel free to add anything else
 you want and show us what you can do! 
 
-We are looking forward to see what you come up with!
+We are looking forward to see what you come up with! nice
